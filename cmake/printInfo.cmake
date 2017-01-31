@@ -1,0 +1,40 @@
+# ----------------------------------------------------------------------------
+# display status message for important variables
+# ----------------------------------------------------------------------------
+message( STATUS )
+MESSAGE( STATUS "-------------------------------------------------------------------------------" )
+message( STATUS "General configuration for ${PROJECT_NAME} ${PROJECT_VERSION}")
+MESSAGE( STATUS "-------------------------------------------------------------------------------" )
+message( STATUS )
+message("    Built as dynamic libs?:" ${BUILD_SHARED_LIBS})
+message("    Compiler:"                   "${CMAKE_COMPILER}"   "${CMAKE_CXX_COMPILER}")
+message( STATUS "C++ flags (Release):       ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE}")
+message( STATUS "C++ flags (Debug):         ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG}")
+message( STATUS "CMAKE_CXX_FLAGS:         ${CMAKE_CXX_FLAGS}")
+message( STATUS "CMAKE_BINARY_DIR:         ${CMAKE_BINARY_DIR}")
+
+MESSAGE( STATUS )
+MESSAGE( STATUS "CMAKE_SYSTEM_PROCESSOR = ${CMAKE_SYSTEM_PROCESSOR}" )
+MESSAGE( STATUS "BUILD_SHARED_LIBS = ${BUILD_SHARED_LIBS}" )
+MESSAGE( STATUS "CMAKE_INSTALL_PREFIX = ${CMAKE_INSTALL_PREFIX}" )
+MESSAGE( STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}" )
+MESSAGE( STATUS "CMAKE_MODULE_PATH = ${CMAKE_MODULE_PATH}" )
+
+MESSAGE( STATUS )
+MESSAGE( STATUS "---------------------------     Documentation     -----------------------------" )
+MESSAGE( STATUS )
+MESSAGE( STATUS "INSTALL_DOC = ${INSTALL_DOC}" )
+MESSAGE( STATUS "USE_LATEX = ${USE_LATEX}" )
+MESSAGE( STATUS "USE_DOT = ${USE_DOT}" )
+MESSAGE( STATUS "USE_CHM = ${USE_CHM}" )
+MESSAGE( STATUS )
+MESSAGE( STATUS "FOUND OPENGL=${GL_FOUND}    LIBS=${OPENGL_LIBS}")
+MESSAGE( STATUS "OpenCV_LIB_DIR=${OpenCV_LIB_DIR} OpenCV_INCLUDE_DIRS=${OpenCV_INCLUDE_DIRS}")
+MESSAGE( STATUS "CMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}")
+MESSAGE( STATUS "USE_OWN_EIGEN3=${USE_OWN_EIGEN3} EIGEN3_INCLUDE_DIR=${EIGEN3_INCLUDE_DIR}")
+
+
+MESSAGE( STATUS )
+MESSAGE( STATUS )
+MESSAGE( STATUS "Change a value with: cmake -D<Variable>=<Value>" )
+MESSAGE( STATUS )
