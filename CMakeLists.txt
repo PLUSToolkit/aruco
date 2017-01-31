@@ -31,8 +31,4 @@ IF(BUILD_TESTS)
 ENDIF()
 
 include(cmake/printInfo.cmake)
-
-# pkg-config
-configure_file(aruco.pc.in aruco.pc @ONLY)
-configure_file(aruco-uninstalled.pc.in aruco-uninstalled.pc @ONLY)
-install(FILES "${PROJECT_BINARY_DIR}/aruco-uninstalled.pc" "${PROJECT_BINARY_DIR}/aruco.pc" DESTINATION lib/pkgconfig)
+include(cmake/installOptions.cmake)
