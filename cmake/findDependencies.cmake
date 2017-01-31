@@ -2,9 +2,8 @@
 #   Find Dependencies
 # ----------------------------------------------------------------------------
 
-find_package(OpenCV 	REQUIRED )
-set (ARUCO_REQUIRED_LIBRARIES ${OpenCV_LIBS})
-include_directories(${OpenCV_INCLUDE_DIRS})
+find_package(OpenCV REQUIRED core highgui imgproc calib3d)
+message(STATUS "OpenCV found, version: ${OpenCV_VERSION}")
 
 if(OpenCV_VERSION VERSION_LESS "3.0")#Opencv 2 requires the ad-hoc levmarq method for tracking since solvePnp from intrinsicguess does not work
     if(NOT USE_OWN_EIGEN3)
@@ -19,12 +18,7 @@ if(OpenCV_VERSION VERSION_LESS "3.0")#Opencv 2 requires the ad-hoc levmarq metho
     endif()
 endif()
 
-
-
 # Check if we have OpenCV 3
-
-
-
 
 if(EXISTS ${GLUT_PATH})
     include_directories(${GLUT_PATH}/include)
