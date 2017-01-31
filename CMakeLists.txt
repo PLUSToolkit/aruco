@@ -1,13 +1,11 @@
 # ----------------------------------------------------------------------------
 #   Basic Configuration
 # ----------------------------------------------------------------------------
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
-PROJECT(aruco)
-set(PROJECT_VERSION "2.0.19")
-string(REGEX MATCHALL "[0-9]" PROJECT_VERSION_PARTS "${PROJECT_VERSION}")
-list(GET PROJECT_VERSION_PARTS 0 PROJECT_VERSION_MAJOR)
-list(GET PROJECT_VERSION_PARTS 1 PROJECT_VERSION_MINOR)
-list(GET PROJECT_VERSION_PARTS 2 PROJECT_VERSION_PATCH)
+cmake_minimum_required(VERSION 3.0)
+project(aruco 
+    VERSION "2.0.19"
+    LANGUAGES CXX
+)
 set(PROJECT_SOVERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
 
 include(cmake/options.cmake)
