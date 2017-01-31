@@ -39,8 +39,8 @@ option(INSTALL_DOC 	"Set to ON to build/install Documentation" OFF)
 if (INSTALL_DOC)
     find_package(Doxygen REQUIRED)
     message( STATUS "INSTALL_DOC:         ${INSTALL_DOC} ")
-    include("${PROJECT_SOURCE_DIR}/generateDoc.cmake")
-    GENERATE_DOCUMENTATION(${PROJECT_SOURCE_DIR}/dox.in)
+    include("${PROJECT_SOURCE_DIR}/cmake/generateDoc.cmake")
+    generate_documentation(${PROJECT_SOURCE_DIR}/cmake/dox.in)
 endif()
 
 # ----------------------------------------------------------------------------
