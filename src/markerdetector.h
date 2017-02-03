@@ -162,6 +162,10 @@ public:
                      ARTOOLKITPLUS,
                      ARTOOLKITPLUSBCH,//
                      TAG16h5,TAG25h7,TAG25h9,TAG36h11,TAG36h10//APRIL TAGS DICIONARIES
+                     CHILITAGS,//chili tags dictionary . NOT RECOMMENDED. It has distance 0. Markers 806 and 682 should not be used!!!
+
+      If dict_type is none of the above ones, it is assumed you mean a CUSTOM dicionary saved in a file @see Dictionary::loadFromFile
+      Then, it tries to open it
     */
     void setDictionary(std::string dict_type,float error_correction_rate=0)throw(cv::Exception);
 

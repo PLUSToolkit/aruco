@@ -59,11 +59,8 @@ public:
      * @brief create Factory function that returns the desired detector
      * @param detector
      *      * Possible names implemented are:
-     * ARUCO: original aruco markers (0-1024) http://www.sciencedirect.com/science/article/pii/S0031320314000235
-     * HRM  : highly reliable markers: http://www.sciencedirect.com/science/article/pii/S0031320315003544
+     * ARUCO,CHILITAGS....: original aruco markers (0-1024) http://www.sciencedirect.com/science/article/pii/S0031320314000235
      * SVM:
-     * @param params optional parameters
-     * When HRM, the path to the dictionary desired.
      * @return
      */
     static cv::Ptr<MarkerLabeler> create(std::string detector,std::string params="")throw (cv::Exception);

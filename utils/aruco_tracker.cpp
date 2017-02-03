@@ -48,6 +48,7 @@ int main(int argc, char **argv) {
         if (argc <4 || cml["-h"] ){
             cerr << "Usage: video.avi  cameraParams.yml  markerSize [-d <dicionary>:ARUCO default] " << endl;
             cerr<<"\tDictionaries: "; for(auto dict:aruco::Dictionary::getDicTypes())    cerr<<dict<<" ";cerr<<endl;
+            cerr<<"\t Instead of these, you can directly indicate the path to a file with your own generated dictionary"<<endl;
             cout<<"Example to work with apriltags dictionary : video.avi -d TAG36h11"<<endl<<endl;
             return 0;
         }

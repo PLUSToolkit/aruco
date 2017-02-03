@@ -153,8 +153,12 @@ void MarkerDetector::detect(const cv::Mat &input, vector< Marker > &detectedMark
     for(int i=std::max(3.,_params._thresParam1-2*_params._thresParam1_range);i<=_params._thresParam1+2*_params._thresParam1_range;i+=2)p1_values.push_back(i);
     thres_images.resize(p1_values.size());
  #pragma omp parallel for
-    for (int i = 0; i < int(p1_values.size()); i++)
+    for (int i = 0; i < int(p1_values.size()); i++){
         thresHold(_params._thresMethod, imgToBeThresHolded, thres_images[i], p1_values[i], _params._thresParam2);
+        //do a eroding?
+//        cv::erode(thres_images[i],aux, getStructuringElement( MORPH_ELLIPSE,cv::Size( 3, 3 ),cv::Point( 1, 1 ) ););
+//        thres_images[i]=aux;
+    }
     thres = thres_images[n_param1 / 2];
      //
 
@@ -1130,9 +1134,12 @@ void MarkerDetector::setDictionary(Dictionary::DICT_TYPES dict_type,float error_
     markerIdDetector= MarkerLabeler::create(dict_type,error_correction_rate);
     if (markerIdDetector->getBestInputSize()!=-1)setWarpSize(markerIdDetector->getBestInputSize());
 }
+
 void MarkerDetector::setDictionary(string dict_type,float error_correction_rate)throw(cv::Exception){
-    markerIdDetector= MarkerLabeler::create(Dictionary::getTypeFromString( dict_type),error_correction_rate);
+    markerIdDetector= MarkerLabeler::create( dict_type,std::to_string(error_correction_rate));
     if (markerIdDetector->getBestInputSize()!=-1)setWarpSize(markerIdDetector->getBestInputSize());
 }
+
+
 
 };

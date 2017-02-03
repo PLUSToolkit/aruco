@@ -1,3 +1,9 @@
+Version 2.0.19
+  - corrected bug in utils/aruco_print_marker.cpp
+Version 2.0.18
+  - added support for custom dictionaries
+  - added ChiliTags dictionary
+  - utils/aruco_print_marker added option to print a marker with enclosed squareg to allow subpixel refinement
 Version 2.0.17
   - Bug in hamming distances corrected
   - Bug in dictionary.cpp with the creation of

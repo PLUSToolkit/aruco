@@ -41,8 +41,9 @@ int main(int argc, char **argv) {
     try {
         CmdLineParser cml(argc,argv);
         if (argc ==1 || cml["-h"] ){
-            cerr << "Usage: (in_image|video.avi) [-c cameraParams.yml] [-s markerSize] [-d <dicionary>:ARUCO default] [-o <outImage>] " << endl;
+            cerr << "Usage: (in_image|video.avi) [-c cameraParams.yml] [-s markerSize] [-d <dicionary>:ARUCO default]  [-o <outImage>] " << endl;
             cerr<<"\tDictionaries: "; for(auto dict:aruco::Dictionary::getDicTypes())    cerr<<dict<<" ";cerr<<endl;
+            cerr<<"\t Instead of these, you can directly indicate the path to a file with your own generated dictionary"<<endl;
             cout<<"Example to work with apriltags dictionary : video.avi -d TAG36h11"<<endl<<endl;
             return 0;
         }
@@ -67,8 +68,7 @@ int main(int argc, char **argv) {
         //Set the dictionary you want to work with, if you included option -d in command line
         //see dictionary.h for all types
         if (cml["-d"])  //if the -d is in the command line
-            MDetector.setDictionary( cml("-d"),0.f);//cml("-d") return the string after -d in the command line "example: ./program video.avi -d ARUCO", then, returns the string "ARUCO"
-
+            MDetector.setDictionary( cml("-d"),0.f);
         // Ok, let's detect
         vector< Marker >  Markers=MDetector.detect(InImage, CamParam, MarkerSize);
 

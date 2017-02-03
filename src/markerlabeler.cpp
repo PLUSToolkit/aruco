@@ -14,6 +14,7 @@ cv::Ptr<MarkerLabeler> MarkerLabeler::create(Dictionary::DICT_TYPES dict_type,fl
 }
 
 
+
 cv::Ptr<MarkerLabeler> MarkerLabeler::create(std::string detector,std::string params)throw (cv::Exception){
 (void)params;
     if (detector=="SVM"){
@@ -27,9 +28,10 @@ cv::Ptr<MarkerLabeler> MarkerLabeler::create(std::string detector,std::string pa
 #endif
     }
     else{
-        Dictionary dict=Dictionary::loadPredefined(detector);
+        Dictionary dict=Dictionary::load( detector);
+        //try with one from file
         DictionaryBased *db=new DictionaryBased();
-        db->setParams(dict,0);
+        db->setParams(dict,std::stof(params));
         return db;
     }
 

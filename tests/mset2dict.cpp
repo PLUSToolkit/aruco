@@ -32,7 +32,6 @@ int main(int argc,char **argv){
 //        cout<<"std::pair<uint64_t,int>("<<code<<","<<i<<")";
         cout<<"0x"<<std::hex<<code<<"UL";
         if (i<dic.size()-1)cout<<",";
-
     }
     cout<<"};\n\n";
 

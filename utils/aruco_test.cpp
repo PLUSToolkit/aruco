@@ -71,6 +71,7 @@ int main(int argc, char **argv) {
             cerr << "Invalid number of arguments" << endl;
             cerr << "Usage: (in.avi|live[:idx_cam=0]) [-c camera_params.yml] [-s  marker_size_in_meters] [-d dictionary:ARUCO by default] [-h]" << endl;
             cerr<<"\tDictionaries: "; for(auto dict:aruco::Dictionary::getDicTypes())    cerr<<dict<<" ";cerr<<endl;
+            cerr<<"\t Instead of these, you can directly indicate the path to a file with your own generated dictionary"<<endl;
             return false;
         }
 
@@ -79,7 +80,10 @@ int main(int argc, char **argv) {
         // read camera parameters if passed
         if (cml["-c"] )  TheCameraParameters.readFromXMLFile(cml("-c"));
         float TheMarkerSize = std::stof(cml("-s","-1"));
-        aruco::Dictionary::DICT_TYPES  TheDictionary= Dictionary::getTypeFromString( cml("-d","ARUCO") );
+        //aruco::Dictionary::DICT_TYPES  TheDictionary= Dictionary::getTypeFromString( cml("-d","ARUCO") );
+
+
+
 
         ///////////  OPEN VIDEO
         // read from camera or from  file
@@ -106,9 +110,10 @@ int main(int argc, char **argv) {
         if (TheCameraParameters.isValid())
             TheCameraParameters.resize(TheInputImage.size());
 
-        MDetector.setDictionary(TheDictionary);//sets the dictionary to be employed (ARUCO,APRILTAGS,ARTOOLKIT,etc)
+        MDetector.setDictionary(cml("-d","ARUCO"));//sets the dictionary to be employed (ARUCO,APRILTAGS,ARTOOLKIT,etc)
         MDetector.setThresholdParams(7, 7);
         MDetector.setThresholdParamRange(2, 0);
+       //  MDetector.setCornerRefinementMethod(aruco::MarkerDetector::SUBPIX);
 
         //gui requirements : the trackbars to change this parameters
         iThresParam1 = MDetector.getParams()._thresParam1;
