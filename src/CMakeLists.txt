@@ -42,22 +42,25 @@ set_target_properties(aruco PROPERTIES          # create *nix style library vers
 )
 
 include(GenerateExportHeader)
-generate_export_header(aruco EXPORT_FILE_NAME "${CMAKE_BINARY_DIR}/aruco_export.h")
+generate_export_header(aruco)
 
 target_link_libraries(aruco PUBLIC opencv_core)
 target_link_libraries(aruco PRIVATE opencv_imgproc opencv_calib3d opencv_features2d)
 
 target_include_directories(aruco PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-  $<INSTALL_INTERFACE:include/aruco>
+  $<INSTALL_INTERFACE:include>
 )
 
-install(TARGETS aruco
-    RUNTIME DESTINATION bin COMPONENT main      # Install the dll file in bin directory
-    LIBRARY DESTINATION lib PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE COMPONENT main
-    ARCHIVE DESTINATION lib COMPONENT main)     # Install the dll.a file in lib directory
+install(TARGETS aruco EXPORT arucoConfig
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+    ARCHIVE DESTINATION lib
+)
 
-install(FILES ${headers} ${CMAKE_BINARY_DIR}/aruco_export.h
+install(FILES ${headers} ${CMAKE_CURRENT_BINARY_DIR}/aruco_export.h
     DESTINATION include/aruco
-    COMPONENT main)
+)
+
+install(EXPORT arucoConfig DESTINATION "share/aruco/cmake")
