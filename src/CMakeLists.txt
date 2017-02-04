@@ -1,14 +1,36 @@
+set(sources
+    ar_omp.cpp
+    cameraparameters.cpp
+    checkrectcontour.cpp
+    cvdrawingutils.cpp
+    dictionary.cpp
+    ippe.cpp
+    marker.cpp
+    markerdetector.cpp
+    markerlabeler.cpp
+    markermap.cpp
+    posetracker.cpp
+    markerlabelers/dictionary_based.cpp
+    #markerlabelers/svmmarkers.cpp
+)
 
-file(GLOB hdrs "*.h*")
-file(GLOB srcs "*.c*")
+set(headers
+    ar_omp.h
+    cameraparameters.h
+    checkrectcontour.h
+    cvdrawingutils.h
+    dictionary.h
+    ippe.h
+    marker.h
+    markerdetector.h
+    markerlabeler.h
+    markermap.h
+    posetracker.h
+    markerlabelers/dictionary_based.h
+    #markerlabelers/svmmarkers.h
+)
 
-set(detectors_src   markerlabelers/dictionary_based.cpp   )# markerlabelers/svmmarkers.cpp )
-set(detectors_hdr   markerlabelers/dictionary_based.h     )# markerlabelers/svmmarkers.h)
-
-set(hdrs ${hdrs} ${detectors_hdr})
-set(srcs ${srcs} ${detectors_src})
-
-add_library(aruco ${srcs} ${hdrs})
+add_library(aruco ${sources} ${headers})
 set_target_properties(aruco PROPERTIES 				# create *nix style library versions + symbolic links
     DEFINE_SYMBOL ARUCO_DSO_EXPORTS
 	VERSION ${PROJECT_VERSION}
@@ -24,7 +46,7 @@ install(TARGETS aruco
 	LIBRARY DESTINATION lib PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE COMPONENT main
 	ARCHIVE DESTINATION lib COMPONENT main)			# Install the dll.a file in lib directory
 
-install(FILES ${hdrs}
+install(FILES ${headers}
     DESTINATION include/aruco
 	COMPONENT main)
 
