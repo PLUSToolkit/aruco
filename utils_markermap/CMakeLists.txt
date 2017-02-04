@@ -1,5 +1,3 @@
-include_directories(${PROJECT_SOURCE_DIR}/src ${GNULIBS_INCLUDE_DIR})
-
 add_executable(aruco_create_markermap aruco_create_markermap.cpp)
 add_executable(aruco_simple_markermap aruco_simple_markermap.cpp)
 add_executable(aruco_test_markermap aruco_test_markermap.cpp pcdwriter.cpp)

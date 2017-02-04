@@ -46,6 +46,12 @@ generate_export_header(aruco EXPORT_FILE_NAME "${CMAKE_BINARY_DIR}/aruco_export.
 
 target_link_libraries(aruco PUBLIC opencv_core)
 
+target_include_directories(aruco PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  $<INSTALL_INTERFACE:include/aruco>
+)
+
 install(TARGETS aruco
     RUNTIME DESTINATION bin COMPONENT main      # Install the dll file in bin directory
     LIBRARY DESTINATION lib PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE COMPONENT main

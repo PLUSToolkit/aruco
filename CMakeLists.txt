@@ -5,7 +5,6 @@ cmake_minimum_required(VERSION 3.0)
 project(aruco VERSION "2.0.19" LANGUAGES CXX)
 set(PROJECT_SOVERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-include_directories(${PROJECT_BINARY_DIR})
 
 include(cmake/options.cmake)
 include(cmake/findDependencies.cmake)
