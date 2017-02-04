@@ -1,4 +1,3 @@
-include_directories(.)
 
 file(GLOB hdrs "*.h*")
 file(GLOB srcs "*.c*")
@@ -10,7 +9,6 @@ set(hdrs ${hdrs} ${detectors_hdr})
 set(srcs ${srcs} ${detectors_src})
 
 add_library(aruco ${srcs} ${hdrs})
-include_directories(${CMAKE_CURRENT_BINARY_DIR} )
 set_target_properties(aruco PROPERTIES 				# create *nix style library versions + symbolic links
     DEFINE_SYMBOL ARUCO_DSO_EXPORTS
 	VERSION ${PROJECT_VERSION}
