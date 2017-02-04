@@ -2,7 +2,7 @@
 #   Find Dependencies
 # ----------------------------------------------------------------------------
 
-find_package(OpenCV REQUIRED core highgui imgproc calib3d)
+find_package(OpenCV REQUIRED core highgui imgproc calib3d features2d)
 message(STATUS "OpenCV found, version: ${OpenCV_VERSION}")
 
 if(OpenCV_VERSION VERSION_LESS "3.0")#Opencv 2 requires the ad-hoc levmarq method for tracking since solvePnp from intrinsicguess does not work

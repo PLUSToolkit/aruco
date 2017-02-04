@@ -45,6 +45,7 @@ include(GenerateExportHeader)
 generate_export_header(aruco EXPORT_FILE_NAME "${CMAKE_BINARY_DIR}/aruco_export.h")
 
 target_link_libraries(aruco PUBLIC opencv_core)
+target_link_libraries(aruco PRIVATE opencv_imgproc opencv_calib3d opencv_features2d)
 
 target_include_directories(aruco PUBLIC
   $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
