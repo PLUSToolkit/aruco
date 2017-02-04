@@ -28,14 +28,14 @@
     ********************************/
 #ifndef _Aruco_CheckRectContour_H
 #define _Aruco_CheckRectContour_H
-#include "exports.h"
+#include "aruco_export.h"
 #include <opencv2/core/core.hpp>
 #include <string>
 
 namespace aruco {
 /**\brief Checks if a contour is a rectangle
  */
-class ARUCO_EXPORTS CheckRectContour {
+class ARUCO_EXPORT CheckRectContour {
 public:
     //returns the approximation or empty if not a convex rectangle
     static std::vector<cv::Point> getConvexRect(std::vector<cv::Point> &points,float thres=2);

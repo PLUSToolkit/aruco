@@ -30,7 +30,7 @@ or implied, of Rafael Muñoz Salinas.
 #include <opencv2/core/core.hpp>
 #include <cstdio>
 #include <iostream>
-#include "exports.h"
+#include "aruco_export.h"
 #include "dictionary.h"
 #include "marker.h"
 #include "markerlabeler.h"
@@ -41,7 +41,7 @@ class CameraParameters;
 /**\brief Main class for marker detection
  *
  */
-class ARUCO_EXPORTS MarkerDetector {
+class ARUCO_EXPORT MarkerDetector {
 
 public:
 

@@ -27,7 +27,7 @@ or implied, of Rafael Muñoz Salinas.
 ********************************/
 #ifndef _aruco_detector_
 #define _aruco_detector_
-#include "exports.h"
+#include "aruco_export.h"
 #include <opencv2/core/core.hpp>
 #include "dictionary.h"
 namespace aruco {
@@ -36,7 +36,7 @@ namespace aruco {
  * Additionally, it implements the factory model
  */
 
-class ARUCO_EXPORTS MarkerLabeler  {
+class ARUCO_EXPORT MarkerLabeler  {
 
 
 public:

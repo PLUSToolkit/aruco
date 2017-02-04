@@ -31,22 +31,26 @@ set(headers
 )
 
 add_library(aruco ${sources} ${headers})
-set_target_properties(aruco PROPERTIES 				# create *nix style library versions + symbolic links
+
+set_target_properties(aruco PROPERTIES          # create *nix style library versions + symbolic links
     DEFINE_SYMBOL ARUCO_DSO_EXPORTS
-	VERSION ${PROJECT_VERSION}
-	SOVERSION ${PROJECT_SOVERSION}
-	CLEAN_DIRECT_OUTPUT 1 					        # allow creating static and shared libs without conflicts
-    OUTPUT_NAME "aruco${PROJECT_DLLVERSION}" 	    # avoid conflicts between library and binary target names
+    VERSION ${PROJECT_VERSION}
+    SOVERSION ${PROJECT_SOVERSION}
+    CXX_VISIBILITY_PRESET hidden                # Make all the symbols hidden, so we have to explicitly define an API
+    CLEAN_DIRECT_OUTPUT 1                       # allow creating static and shared libs without conflicts
+    OUTPUT_NAME "aruco${PROJECT_DLLVERSION}"    # avoid conflicts between library and binary target names
 )
+
+include(GenerateExportHeader)
+generate_export_header(aruco EXPORT_FILE_NAME "${CMAKE_BINARY_DIR}/aruco_export.h")
 
 target_link_libraries(aruco PUBLIC opencv_core)
 
 install(TARGETS aruco
-	RUNTIME DESTINATION bin COMPONENT main			# Install the dll file in bin directory
-	LIBRARY DESTINATION lib PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE COMPONENT main
-	ARCHIVE DESTINATION lib COMPONENT main)			# Install the dll.a file in lib directory
+    RUNTIME DESTINATION bin COMPONENT main      # Install the dll file in bin directory
+    LIBRARY DESTINATION lib PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE COMPONENT main
+    ARCHIVE DESTINATION lib COMPONENT main)     # Install the dll.a file in lib directory
 
-install(FILES ${headers}
+install(FILES ${headers} ${CMAKE_BINARY_DIR}/aruco_export.h
     DESTINATION include/aruco
-	COMPONENT main)
-
+    COMPONENT main)

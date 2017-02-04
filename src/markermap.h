@@ -30,14 +30,14 @@ or implied, of Rafael Muñoz Salinas.
 #include <opencv2/core/core.hpp>
 #include <string>
 #include <vector>
-#include "exports.h"
+#include "aruco_export.h"
 #include "marker.h"
 using namespace std;
 namespace aruco {
 /**
  * 3d representation of a marker
  */
-struct ARUCO_EXPORTS Marker3DInfo : public vector< cv::Point3f > {
+struct ARUCO_EXPORT Marker3DInfo : public vector< cv::Point3f > {
     Marker3DInfo() {}
     Marker3DInfo(int _id) { id = _id; }
     bool operator==(const Marker3DInfo &MI) {return id==MI.id;}
@@ -68,7 +68,7 @@ public:
 */
 
 
-class ARUCO_EXPORTS MarkerMap : public vector< Marker3DInfo > {
+class ARUCO_EXPORT MarkerMap : public vector< Marker3DInfo > {
 
 
 public:

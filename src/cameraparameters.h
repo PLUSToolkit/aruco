@@ -27,7 +27,7 @@ or implied, of Rafael Muñoz Salinas.
 ********************************/
 #ifndef _Aruco_CameraParameters_H
 #define _Aruco_CameraParameters_H
-#include "exports.h"
+#include "aruco_export.h"
 #include <opencv2/core/core.hpp>
 #include <string>
 using namespace std;
@@ -35,7 +35,7 @@ namespace aruco {
 /**\brief Parameters of the camera
  */
 
-class ARUCO_EXPORTS CameraParameters {
+class ARUCO_EXPORT CameraParameters {
   public:
     // 3x3 matrix (fx 0 cx, 0 fy cy, 0 0 1)
     cv::Mat CameraMatrix;

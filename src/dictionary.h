@@ -5,7 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <stdint.h>
-#include "exports.h"
+#include "aruco_export.h"
 #include <opencv2/core/core.hpp>
 namespace aruco{
 class MarkerMap;
@@ -16,7 +16,7 @@ class MarkerMap;
  * See enum DICT_TYPES for the set of dicitionaries availables
  */
 
-class ARUCO_EXPORTS Dictionary
+class ARUCO_EXPORT Dictionary
 {
 public:
 

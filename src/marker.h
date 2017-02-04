@@ -27,7 +27,7 @@ or implied, of Rafael Muñoz Salinas.
 ********************************/
 #ifndef _Aruco_Marker_H
 #define _Aruco_Marker_H
-#include "exports.h"
+#include "aruco_export.h"
 #include <vector>
 #include <iostream>
 #include <cstdint>
@@ -39,7 +39,7 @@ namespace aruco {
  *
  */
 
-class ARUCO_EXPORTS Marker : public std::vector< cv::Point2f > {
+class ARUCO_EXPORT Marker : public std::vector< cv::Point2f > {
   public:
     // id of  the marker
     int id;

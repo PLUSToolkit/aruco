@@ -27,7 +27,7 @@ or implied, of Rafael Muñoz Salinas.
 ********************************/
 #ifndef ARUCO_POSETRACKER
 #define ARUCO_POSETRACKER
-#include "exports.h"
+#include "aruco_export.h"
 #include <opencv2/core/core.hpp>
 #include "marker.h"
 #include "markermap.h"
@@ -54,7 +54,7 @@ namespace aruco{
  *
  * If you do not want to risk, I recommen using more conservative approach, use a value of er=4.
  */
-class ARUCO_EXPORTS MarkerPoseTracker{
+class ARUCO_EXPORT MarkerPoseTracker{
   public:
     /**     estimate the pose of the marker.
      * @brief estimatePose
@@ -81,7 +81,7 @@ class ARUCO_EXPORTS MarkerPoseTracker{
 /**Tracks the position of a markermap
  */
 
-class ARUCO_EXPORTS MarkerMapPoseTracker{
+class ARUCO_EXPORT MarkerMapPoseTracker{
 
 public:
     MarkerMapPoseTracker();
