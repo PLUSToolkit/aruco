@@ -27,21 +27,25 @@ or implied, of Rafael Muñoz Salinas.
 ********************************/
 
 // This program converts a boardconfiguration file expressed in pixel to another one expressed in meters
-#include <iostream>
 #include "markermap.h"
+#include <iostream>
 using namespace std;
 using namespace aruco;
-int main(int argc, char **argv) {
-    try {
-
-        if (argc < 4) {
+int main(int argc, char** argv)
+{
+    try
+    {
+        if (argc < 4)
+        {
             cerr << "Usage:  in_boardConfiguration.yml markerSize_meters out_boardConfiguration.yml" << endl;
             return -1;
         }
         aruco::MarkerMap BInfo;
         BInfo.readFromFile(argv[1]);
         BInfo.convertToMeters(atof(argv[2])).saveToFile(argv[3]);
-    } catch (std::exception &ex) {
+    }
+    catch (std::exception& ex)
+    {
         cout << ex.what() << endl;
     }
 }
