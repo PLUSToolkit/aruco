@@ -28,34 +28,37 @@ or implied, of Rafael Muñoz Salinas.
 
 #ifndef ArucoDictionaryBasedMarkerDetector_H
 #define ArucoDictionaryBasedMarkerDetector_H
-#include <opencv2/core/core.hpp>
-#include "../markerlabeler.h"
+
 #include "../dictionary.h"
-namespace aruco {
-/**Labeler using a dictionary
- */
-class   DictionaryBased :public MarkerLabeler {
-public:
+#include "../markerlabeler.h"
 
-    virtual ~DictionaryBased(){}
-    //first, dictionary, second the maximum correction rate [0,1]. If 0,no correction, if 1, maximum allowed correction
-    void setParams(const Dictionary &dic,float max_correction_rate);
+#include <opencv2/core/core.hpp>
+namespace aruco
+{
+    /**Labeler using a dictionary
+     */
+    class DictionaryBased : public MarkerLabeler
+    {
+    public:
+        virtual ~DictionaryBased()
+        {
+        }
+        // first, dictionary, second the maximum correction rate [0,1]. If 0,no correction, if 1, maximum allowed
+        // correction
+        void setParams(const Dictionary& dic, float max_correction_rate);
 
-    //main virtual class to o detection
-    bool detect(const cv::Mat &in, int & marker_id,int &nRotations) ;
-    //returns the dictionary name
-    std::string getName()const;
+        // main virtual class to o detection
+        bool detect(const cv::Mat& in, int& marker_id, int& nRotations);
+        // returns the dictionary name
+        std::string getName() const;
 
-private:
-
-    bool  getInnerCode(const cv::Mat &thres_img, int total_nbits, std::vector<uint64_t> &ids);
-    cv::Mat rotate(const cv::Mat &in) ;
-    uint64_t touulong(const cv::Mat &code);
-    Dictionary _dic;
-    int _maxCorrectionAllowed;
-     void toMat(uint64_t code,int nbits_sq,cv::Mat  &out) ;
-
-
-};
+    private:
+        bool getInnerCode(const cv::Mat& thres_img, int total_nbits, std::vector<uint64_t>& ids);
+        cv::Mat rotate(const cv::Mat& in);
+        uint64_t touulong(const cv::Mat& code);
+        Dictionary _dic;
+        int _maxCorrectionAllowed;
+        void toMat(uint64_t code, int nbits_sq, cv::Mat& out);
+    };
 }
 #endif

@@ -1,4 +1,4 @@
-//Fast method to check if a contour is a rectangle or not
+// Fast method to check if a contour is a rectangle or not
 /*****************************
     Copyright 2011 Rafael Muñoz Salinas. All rights reserved.
 
@@ -28,23 +28,29 @@
     ********************************/
 #ifndef _Aruco_CheckRectContour_H
 #define _Aruco_CheckRectContour_H
+
 #include "aruco_export.h"
+
 #include <opencv2/core/core.hpp>
+
 #include <string>
 
-namespace aruco {
-/**\brief Checks if a contour is a rectangle
- */
-class ARUCO_EXPORT CheckRectContour {
-public:
-    //returns the approximation or empty if not a convex rectangle
-    static std::vector<cv::Point> getConvexRect(std::vector<cv::Point> &points,float thres=2);
-private:
-    static void  calculate_emax_between_points(const std::vector<cv::Point> &contorno, unsigned int inicial, unsigned int final,
-                                               float &errorMaximo, unsigned int &posicion);
+namespace aruco
+{
+    /**\brief Checks if a contour is a rectangle
+     */
+    class ARUCO_EXPORT CheckRectContour
+    {
+    public:
+        // returns the approximation or empty if not a convex rectangle
+        static std::vector<cv::Point> getConvexRect(std::vector<cv::Point>& points, float thres = 2);
 
-    static  bool  check_rect_contour(const std::vector<cv::Point> & contorno, const float &umbral,
-                                     std::vector<cv::Point> &aproximacion);
-};
+    private:
+        static void calculate_emax_between_points(const std::vector<cv::Point>& contorno, unsigned int inicial,
+                                                  unsigned int final, float& errorMaximo, unsigned int& posicion);
+
+        static bool check_rect_contour(const std::vector<cv::Point>& contorno, const float& umbral,
+                                       std::vector<cv::Point>& aproximacion);
+    };
 }
 #endif
