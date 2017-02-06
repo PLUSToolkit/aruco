@@ -44,7 +44,7 @@ CameraParameters TheCameraParameters;
 void cvTackBarEvents(int pos, void*);
 
 pair<double, double> AvrgTime(0, 0);  // determines the average time required for detection
-int iThresParam1, iThresParam2;
+int iThresParam1, iThresParam2,iEnclosedMarkers=0;
 int waitTime = 0;
 class CmdLineParser
 {
@@ -162,6 +162,7 @@ int main(int argc, char** argv)
         cv::namedWindow("in");
         cv::createTrackbar("ThresParam1", "in", &iThresParam1, 25, cvTackBarEvents);
         cv::createTrackbar("ThresParam2", "in", &iThresParam2, 13, cvTackBarEvents);
+        cv::createTrackbar("EnclosedMarkers", "in", &iEnclosedMarkers, 1, cvTackBarEvents);
 
         // go!
         char key = 0;
@@ -231,6 +232,13 @@ void cvTackBarEvents(int pos, void*)
     if (iThresParam1 < 1)
         iThresParam1 = 1;
     MDetector.setThresholdParams(iThresParam1, iThresParam2);
+
+    if (iEnclosedMarkers){
+        auto params=MDetector.getParams();
+        params._doErosion=true;
+         params._cornerMethod=aruco::MarkerDetector::SUBPIX;
+        MDetector.setParams(params);
+    }
     // recompute
     MDetector.detect(TheInputImage, TheMarkers, TheCameraParameters);
     TheInputImage.copyTo(TheInputImageCopy);

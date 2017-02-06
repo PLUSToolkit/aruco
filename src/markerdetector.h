@@ -98,6 +98,9 @@ namespace aruco
             // discarding it
             float _minSize, _maxSize;
             int _minSize_pix;
+            bool _doErosion;//erosion is useful when the markers have black squares in the corners (enclosed markers)
+            //when using enclosed markers, you are can use _cornerMethod==SUBPIX to obtain a much better precision
+
             Params()
             {
                 _thresMethod = ADPT_THRES;
@@ -113,6 +116,7 @@ namespace aruco
                 _borderDistThres =
                     0.005;          // corners at a distance from image boundary nearer than 2.5% of image are ignored
                 _subpix_wsize = 5;  // window size employed for subpixel search (in vase you use _cornerMethod=SUBPIX
+                _doErosion=false;
             }
         };
 
