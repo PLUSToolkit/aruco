@@ -3,7 +3,9 @@
 # ----------------------------------------------------------------------------
 
 find_package(OpenCV REQUIRED core highgui imgcodecs imgproc calib3d features2d)
-message(STATUS "OpenCV found, version: ${OpenCV_VERSION}")
+include_directories( ${OpenCV_INCLUDE_DIRS} )
+
+message(STATUS "OpenCV found, version: ${OpenCV_VERSION} in dir ${OpenCV_INCLUDE_DIRS}")
 
 if(OpenCV_VERSION VERSION_LESS "3.0")#Opencv 2 requires the ad-hoc levmarq method for tracking since solvePnp from intrinsicguess does not work
 	if(NOT USE_OWN_EIGEN3)
