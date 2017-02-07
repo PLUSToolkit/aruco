@@ -74,7 +74,6 @@ int main(int argc, char** argv)
 
     // insert the elements
     cout << "\n\nvector<uint64_t> codes={";
-    int idx = 0;
     for (size_t i = 0; i < numbers.size(); i++)
     {
         cout << "0x" << std::hex << numbers[i] << "UL";
