@@ -862,6 +862,7 @@ namespace aruco
             }
             //       cout<<"S="<<start<<" "<<end<<" "<<end-start<<" "<<(size.width>>1)<<endl;
             // check that the size is big enough and
+            /// \todo replace assert by exception and test this code.
             assert(start != -1 && end != -1 && (end - start) > size.width >> 1);
             uchar* In_image = imAux.ptr<uchar>(y);
             uchar* Out_image = outIm.ptr<uchar>(y);
