@@ -484,11 +484,12 @@ uint64_t Dictionary::computeDictionaryDistance(const Dictionary &dict){
          assert( getCode(rotate(m))==tag_id.first );
 
     }
+
     //now, compute minimum distance
-     std::map<uint64_t,std::set<uint64_t> >errors;
+    std::map<uint64_t,std::set<uint64_t> >errors;
     uint64_t mind=std::numeric_limits<uint64_t>::max();
-    for(int i=0;i<all_rotations.size();i++){
-        for(int j=0;j<all_rotations.size();j++){
+    for(size_t i=0;i<all_rotations.size();i++){
+        for(size_t j=0;j<all_rotations.size();j++){
             if (i!=j){
 
                 auto d=bitset<64>(all_rotations[i]^all_rotations[j]).count();
