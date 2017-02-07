@@ -381,12 +381,12 @@ namespace aruco
          */
         bool HighlyReliableMarkers::checkBorders(cv::Mat grey)
         {
-            for (int y = 0; y < _ncellsBorder; y++)
+            for (unsigned int y = 0; y < _ncellsBorder; y++)
             {
-                int inc = _ncellsBorder - 1;
+                unsigned int inc = _ncellsBorder - 1;
                 if (y == 0 || y == _ncellsBorder - 1)
                     inc = 1;  // for first and last row, check the whole border
-                for (int x = 0; x < _ncellsBorder; x += inc)
+                for (unsigned int x = 0; x < _ncellsBorder; x += inc)
                 {
                     int Xstart = (x) * (_swidth);
                     int Ystart = (y) * (_swidth);
@@ -406,9 +406,9 @@ namespace aruco
         MarkerCode HighlyReliableMarkers::getMarkerCode(const cv::Mat& grey)
         {
             MarkerCode candidate(_n);
-            for (int y = 0; y < _n; y++)
+            for (unsigned int y = 0; y < _n; y++)
             {
-                for (int x = 0; x < _n; x++)
+                for (unsigned int x = 0; x < _n; x++)
                 {
                     int Xstart = (x + 1) * (_swidth);
                     int Ystart = (y + 1) * (_swidth);

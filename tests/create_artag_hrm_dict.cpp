@@ -26,14 +26,18 @@ int main(int argc, char** argv)
         std::getline(file, line);
         bool start = 0;
         string number;
-        for (int i = 0; i < line.size(); i++)
+        for (size_t i = 0; i < line.size(); i++)
+        {
             if (line[i] == '=')
+            {
                 start = 1;
+            }
             else
             {
                 if (start == 1 && line[i] != ';' && line[i] != 'U' && line[i] != 'L')
                     number.push_back(line[i]);
             }
+        }
 
         if (number.size() != 0)
         {
@@ -47,7 +51,7 @@ int main(int argc, char** argv)
     };
     // now,create the codes
     cout << "vector<uint64_t> codes={";
-    for (int i = 0; i < bits.size(); i++)
+    for (size_t i = 0; i < bits.size(); i++)
     {
         uint64_t code = bits[i].to_ullong();
         cout << "0x" << std::hex << code << "UL";
