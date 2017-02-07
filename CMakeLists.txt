@@ -11,9 +11,6 @@ include(cmake/options.cmake)
 include(cmake/compilerOptions.cmake)
 
 
-#------------------------------------------------
-# DIRS
-#------------------------------------------------
 add_subdirectory(src)
 if(BUILD_UTILS)
   add_subdirectory(utils)
