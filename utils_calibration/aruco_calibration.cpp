@@ -122,7 +122,7 @@ int main(int argc, char** argv)
         CmdLineParser cml(argc, argv);
         if (argc < 3 || cml["-h"])
         {
-            cerr << "Usage: (in.avi|live) out_camera_calibration.yml  [-m markermapConfig.yml (configuration of the "
+            cerr << "Usage: (in.avi|live[:camera_index(e.g 0 or 1)])) out_camera_calibration.yml  [-m markermapConfig.yml (configuration of the "
                     "board. If use default one (in utils), no need to set this)]    [-size <float> :(value in meters "
                     "of a marker. If you provide a board that contains that information, this is ommited) ] "
                  << endl;
@@ -146,9 +146,20 @@ int main(int argc, char** argv)
         if (!TheMarkerMapConfig.isExpressedInMeters())
             TheMarkerMapConfig = TheMarkerMapConfig.convertToMeters(atof(cml("-size").c_str()));
         // read from camera or from  file
-        if (string(argv[1]) == "live")
+        string TheInputVideo=string(argv[1]);
+        if ( TheInputVideo.find( "live")!=std::string::npos)
         {
-            TheVideoCapturer.open(0);
+            int vIdx = 0;
+            // check if the :idx is here
+            char cad[100];
+            if (TheInputVideo.find(":") != string::npos)
+            {
+                std::replace(TheInputVideo.begin(), TheInputVideo.end(), ':', ' ');
+                sscanf(TheInputVideo.c_str(), "%s %d", cad, &vIdx);
+            }
+            cout << "Opening camera index " << vIdx << endl;
+            TheVideoCapturer.open(vIdx);
+            waitTime = 10;
         }
         else
             TheVideoCapturer.open(argv[1]);
@@ -166,8 +177,10 @@ int main(int argc, char** argv)
         MarkerDetector::Params params;
         // play with this paramteres if the detection does not work correctly
         params._borderDistThres = .01;  // acept markers near the borders
+
         params._thresParam1 = 5;
         params._thresParam1_range = 5;                                     // search in wide range of values for param1
+        params._doErosion=true;//prevents problems with corners enclosed
         params._cornerMethod = MarkerDetector::SUBPIX;                     // use subpixel corner refinement
         params._subpix_wsize = (15. / 2000.) * float(TheInputImage.cols);  // search corner subpix in a 5x5 widow area
         TheMarkerDetector.setParams(params);                               // set the params above
@@ -182,7 +195,7 @@ int main(int argc, char** argv)
 
         cv::createTrackbar("ThresParam1", "in", &iThresParam1, 13, cvTackBarEvents);
         cv::createTrackbar("ThresParam2", "in", &iThresParam2, 13, cvTackBarEvents);
-        char key = 0, capturing = 0;
+        char key = 0, capturing = 1;
         // capture until press ESC or until the end of the video
         do
         {
