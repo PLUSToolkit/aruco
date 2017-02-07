@@ -266,7 +266,7 @@ namespace aruco
             unsigned int res = m.size();
             for (unsigned int i = 0; i < size(); i++)
             {
-                unsigned int minRotAux;
+                unsigned int minRotAux = 0;
                 unsigned int distance = (*this)[i].distance(m, minRotAux);
                 if (distance < res)
                 {
