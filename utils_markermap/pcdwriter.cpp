@@ -251,14 +251,13 @@ cv::Mat rigidBodyTransformation_Horn1987(const std::vector<cv::Point3f>& org, co
 cv::Point3f mult(const cv::Mat& m, cv::Point3f p)
 {
     assert(m.isContinuous());
+    cv::Point3f res;
     if (m.type() == CV_32F)
     {
         const float* ptr = m.ptr<float>(0);
-        cv::Point3f res;
         res.x = ptr[0] * p.x + ptr[1] * p.y + ptr[2] * p.z + ptr[3];
         res.y = ptr[4] * p.x + ptr[5] * p.y + ptr[6] * p.z + ptr[7];
         res.z = ptr[8] * p.x + ptr[9] * p.y + ptr[10] * p.z + ptr[11];
-        return res;
     }
     else if (m.type() == CV_64F)
     {
@@ -267,8 +266,8 @@ cv::Point3f mult(const cv::Mat& m, cv::Point3f p)
         res.x = ptr[0] * p.x + ptr[1] * p.y + ptr[2] * p.z + ptr[3];
         res.y = ptr[4] * p.x + ptr[5] * p.y + ptr[6] * p.z + ptr[7];
         res.z = ptr[8] * p.x + ptr[9] * p.y + ptr[10] * p.z + ptr[11];
-        return res;
     }
+    return res;
 }
 
 std::vector<cv::Vec4f> getPcdPoints(const vector<cv::Point3f>& mpoints, cv::Scalar color, int npoints = 100)
