@@ -324,23 +324,23 @@ cv::Mat Dictionary::getMarkerImage_id(int id,int bit_size,bool addWaterMark,bool
 
 std::string Dictionary::getTypeString(DICT_TYPES t)  throw(cv::Exception){
     switch(t){
-    case ARUCO:return "ARUCO";break;
-    case ARUCO_MIP_16h3:return "ARUCO_MIP_16h3";break;
-    case ARUCO_MIP_25h7:return "ARUCO_MIP_25h7";break;
-    case ARTAG:return "ARTAG";break;
+    case ARUCO:return "ARUCO";
+    case ARUCO_MIP_16h3:return "ARUCO_MIP_16h3";
+    case ARUCO_MIP_25h7:return "ARUCO_MIP_25h7";
+    case ARTAG:return "ARTAG";
 
-    case ARUCO_MIP_36h12:return "ARUCO_MIP_36h12";break;
-    case ARTOOLKITPLUS:return "ARTOOLKITPLUS";break;
-    case ARTOOLKITPLUSBCH:return "ARTOOLKITPLUSBCH";break;
-    case TAG16h5:return "TAG16h5";break;
-    case TAG25h7:return "TAG25h7";break;
-    case TAG25h9:return "TAG25h9";break;
-    case TAG36h11:return "TAG36h11";break;
-    case TAG36h10:return "TAG36h10";break;
-    case CHILITAGS:return "CHILITAGS";break;
-    case CUSTOM:return "CUSTOM";break;
-
+    case ARUCO_MIP_36h12:return "ARUCO_MIP_36h12";
+    case ARTOOLKITPLUS:return "ARTOOLKITPLUS";
+    case ARTOOLKITPLUSBCH:return "ARTOOLKITPLUSBCH";
+    case TAG16h5:return "TAG16h5";
+    case TAG25h7:return "TAG25h7";
+    case TAG25h9:return "TAG25h9";
+    case TAG36h11:return "TAG36h11";
+    case TAG36h10:return "TAG36h10";
+    case CHILITAGS:return "CHILITAGS";
+    case CUSTOM:return "CUSTOM";
    };
+   return "Non valid DICT_TYPE";
 }
 
 Dictionary::DICT_TYPES Dictionary::getTypeFromString(std::string str)   throw(cv::Exception){
