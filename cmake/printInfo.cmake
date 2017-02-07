@@ -22,6 +22,7 @@ message( STATUS "USE_DOUBLE_PRECISION_PNP = ${USE_DOUBLE_PRECISION_PNP}" )
 message( STATUS "BUILD_UTILS = ${BUILD_UTILS}" )
 message( STATUS "BUILD_TESTS = ${BUILD_TESTS}" )
 message( STATUS "BUILD_GLSAMPLES = ${BUILD_GLSAMPLES}" )
+message( STATUS "USE_OWN_EIGEN3=${USE_OWN_EIGEN3}")
 
 message( STATUS )
 message( STATUS "---------------------------     Documentation     -----------------------------" )
@@ -34,7 +35,7 @@ message( STATUS )
 message( STATUS "FOUND OPENGL=${GL_FOUND}    LIBS=${OPENGL_LIBS}")
 message( STATUS "OpenCV_LIB_DIR=${OpenCV_LIB_DIR} OpenCV_INCLUDE_DIRS=${OpenCV_INCLUDE_DIRS}")
 message( STATUS "CMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}")
-message( STATUS "USE_OWN_EIGEN3=${USE_OWN_EIGEN3} EIGEN3_INCLUDE_DIR=${EIGEN3_INCLUDE_DIR}")
+message( STATUS "EIGEN3_INCLUDE_DIR=${EIGEN3_INCLUDE_DIR}")
 
 
 message( STATUS )
