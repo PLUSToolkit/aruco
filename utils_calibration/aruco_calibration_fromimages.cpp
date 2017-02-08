@@ -145,6 +145,7 @@ int main(int argc, char** argv)
         params._maxSize = 0.9;
         params._thresParam1 = 5;
         params._thresParam1_range = 10;                                    // search in wide range of values for param1
+        params._doErosion=true;//prevents problems with corners enclosed
         params._cornerMethod = MarkerDetector::SUBPIX;                     // use subpixel corner refinement
         params._subpix_wsize = (10. / 2000.) * float(TheInputImage.cols);  // search corner subpix in a  widow area
         cout << params._subpix_wsize << " " << float(TheInputImage.cols) << endl;
