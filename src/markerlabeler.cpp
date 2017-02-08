@@ -6,7 +6,7 @@
 namespace aruco
 {
     cv::Ptr<MarkerLabeler> MarkerLabeler::create(Dictionary::DICT_TYPES dict_type,
-                                                 float error_correction_rate) throw(cv::Exception)
+                                                 float error_correction_rate)
     {
         Dictionary dict = Dictionary::loadPredefined(dict_type);
         DictionaryBased* db = new DictionaryBased();
@@ -14,7 +14,7 @@ namespace aruco
         return db;
     }
 
-    cv::Ptr<MarkerLabeler> MarkerLabeler::create(std::string detector, std::string params) throw(cv::Exception)
+    cv::Ptr<MarkerLabeler> MarkerLabeler::create(std::string detector, std::string params)
     {
         (void)params;
         if (detector == "SVM")

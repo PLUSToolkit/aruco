@@ -89,7 +89,7 @@ namespace aruco
          * axis
          */
         void calculateExtrinsics(float markerSize, const CameraParameters& CP,
-                                 bool setYPerpendicular = true) throw(cv::Exception);
+                                 bool setYPerpendicular = true);
         /**Calculates the extrinsics (Rvec and Tvec) of the marker with respect to the camera
          * @param markerSize size of the marker side expressed in meters
          * @param CameraMatrix matrix with camera parameters (fx,fy,cx,cy)
@@ -98,12 +98,12 @@ namespace aruco
          * axis
          */
         void calculateExtrinsics(float markerSize, cv::Mat CameraMatrix, cv::Mat Distorsion = cv::Mat(),
-                                 bool setYPerpendicular = true) throw(cv::Exception);
+                                 bool setYPerpendicular = true);
 
         /**Given the extrinsic camera parameters returns the GL_MODELVIEW matrix for opengl.
          * Setting this matrix, the reference coordinate system will be set in this marker
          */
-        void glGetModelViewMatrix(double modelview_matrix[16]) throw(cv::Exception);
+        void glGetModelViewMatrix(double modelview_matrix[16]);
 
         /**
          * Returns position vector and orientation quaternion for an Ogre scene node or entity.
@@ -115,7 +115,7 @@ namespace aruco
          * mySceneNode->setOrientation( ogreOrient  );
          * ...
          */
-        void OgreGetPoseParameters(double position[3], double orientation[4]) throw(cv::Exception);
+        void OgreGetPoseParameters(double position[3], double orientation[4]);
 
         /**Returns the centroid of the marker
             */

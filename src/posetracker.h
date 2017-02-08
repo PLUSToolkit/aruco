@@ -109,7 +109,7 @@ namespace aruco
         // transform to meters
         // Throws exception if wrong configuraiton
         void setParams(const CameraParameters& cam_params, const MarkerMap& msconf,
-                       float markerSize = -1) throw(cv::Exception);
+                       float markerSize = -1);
         // indicates if the call to setParams has been successfull and this object is ready to call estimatePose
         bool isValid() const
         {

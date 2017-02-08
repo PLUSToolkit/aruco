@@ -96,10 +96,10 @@ namespace aruco
 
         // used for boards
         MarkerMap createMarkerMap(cv::Size gridSize, int MarkerSize, int MarkerDistance, const std::vector<int>& Ids,
-                                  bool chess_board = false) throw(cv::Exception);
+                                  bool chess_board = false);
 
-        static Dictionary loadPredefined(DICT_TYPES type) throw(cv::Exception);
-        static Dictionary loadPredefined(std::string type) throw(cv::Exception);
+        static Dictionary loadPredefined(DICT_TYPES type);
+        static Dictionary loadPredefined(std::string type);
 
         /** loads a dictionary defined in a file
         * Please note that the parsing is very basic and you must be very strict.
@@ -118,27 +118,27 @@ namespace aruco
         * 111101010
         * 000001100
         */
-        static Dictionary loadFromFile(std::string path) throw(cv::Exception);
+        static Dictionary loadFromFile(std::string path);
 
         /**Loads a dictioanary using the string passed. If it is a string of the predefined dictionaries, then returns
          * it.
          * Otherwise, tries to load from a file
           */
-        static Dictionary load(std::string info) throw(cv::Exception);
+        static Dictionary load(std::string info);
 
         //    //io functions
-        //    void saveToFile(std::string file)throw(cv::Exception);
-        //    void readFromFile(std::string file)throw(cv::Exception);
-        //    void saveToStream(std::ostream & str)throw(cv::Exception);
-        //    void readFromStream(std::istream &str)throw(cv::Exception);
+        //    void saveToFile(std::string file);
+        //    void readFromFile(std::string file);
+        //    void saveToStream(std::ostream & str);
+        //    void readFromStream(std::istream &str);
 
         // returns the dictionary distance
         static uint64_t computeDictionaryDistance(const Dictionary& d);
 
         // given a string,returns the type
-        static DICT_TYPES getTypeFromString(std::string str) throw(cv::Exception);
-        static std::string getTypeString(DICT_TYPES t) throw(cv::Exception);
-        static bool isPredefinedDictinaryString(std::string str) throw(cv::Exception);
+        static DICT_TYPES getTypeFromString(std::string str);
+        static std::string getTypeString(DICT_TYPES t);
+        static bool isPredefinedDictinaryString(std::string str);
         static std::vector<std::string> getDicTypes();
 
     private:

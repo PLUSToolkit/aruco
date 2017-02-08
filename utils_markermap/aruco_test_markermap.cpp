@@ -82,7 +82,7 @@ public:
 };
 
 void savePCDFile(string fpath, const aruco::MarkerMap& ms,
-                 const std::map<int, cv::Mat> frame_pose_map) throw(std::exception);
+                 const std::map<int, cv::Mat> frame_pose_map);
 void savePosesToFile(string filename, const std::map<int, cv::Mat>& fmp);
 
 /************************************

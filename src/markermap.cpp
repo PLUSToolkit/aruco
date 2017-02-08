@@ -51,7 +51,7 @@ namespace aruco
     *
     *
     */
-    MarkerMap::MarkerMap(string filePath) throw(cv::Exception)
+    MarkerMap::MarkerMap(string filePath)
     {
         mInfoType = NONE;
         readFromFile(filePath);
@@ -61,14 +61,14 @@ namespace aruco
     *
     *
     */
-    void MarkerMap::saveToFile(string sfile) throw(cv::Exception)
+    void MarkerMap::saveToFile(string sfile)
     {
         cv::FileStorage fs(sfile, cv::FileStorage::WRITE);
         saveToFile(fs);
     }
     /**Saves the board info to a file
     */
-    void MarkerMap::saveToFile(cv::FileStorage& fs) throw(cv::Exception)
+    void MarkerMap::saveToFile(cv::FileStorage& fs)
     {
         fs << "aruco_bc_dict" << dictionary;
         fs << "aruco_bc_nmarkers" << (int)size();
@@ -94,7 +94,7 @@ namespace aruco
     *
     *
     */
-    void MarkerMap::readFromFile(string sfile) throw(cv::Exception)
+    void MarkerMap::readFromFile(string sfile)
     {
         try
         {
@@ -110,7 +110,7 @@ namespace aruco
 
     /**Reads board info from a file
     */
-    void MarkerMap::readFromFile(cv::FileStorage& fs) throw(cv::Exception)
+    void MarkerMap::readFromFile(cv::FileStorage& fs)
     {
         int aux = 0;
         // look for the nmarkers
@@ -152,7 +152,7 @@ namespace aruco
 
     /**
      */
-    const Marker3DInfo& MarkerMap::getMarker3DInfo(int id) const throw(cv::Exception)
+    const Marker3DInfo& MarkerMap::getMarker3DInfo(int id) const
     {
         for (size_t i = 0; i < size(); i++)
             if (at(i).id == id)
@@ -162,7 +162,7 @@ namespace aruco
     }
 
     void __glGetModelViewMatrix(double modelview_matrix[16], const cv::Mat& Rvec,
-                                const cv::Mat& Tvec) throw(cv::Exception)
+                                const cv::Mat& Tvec)
     {
         // check if paremeters are valid
         bool invalid = false;
@@ -220,7 +220,7 @@ namespace aruco
      *
      */
     void __OgreGetPoseParameters(double position[3], double orientation[4], const cv::Mat& Rvec,
-                                 const cv::Mat& Tvec) throw(cv::Exception)
+                                 const cv::Mat& Tvec)
     {
         // check if paremeters are valid
         bool invalid = false;
@@ -320,7 +320,7 @@ namespace aruco
             ids.push_back(at(i).id);
     }
 
-    MarkerMap MarkerMap::convertToMeters(float markerSize_meters) throw(cv::Exception)
+    MarkerMap MarkerMap::convertToMeters(float markerSize_meters)
     {
         if (!isExpressedInPixels())
             throw cv::Exception(-1, "The board is not expressed in pixels", "MarkerMap::convertToMeters", __FILE__,
@@ -339,7 +339,7 @@ namespace aruco
             }
         return BInfo;
     }
-    cv::Mat MarkerMap::getImage(float METER2PIX) const throw(cv::Exception)
+    cv::Mat MarkerMap::getImage(float METER2PIX) const
     {
         if (mInfoType == NONE)
             throw cv::Exception(-1, "The board is not valid mInfoType==NONE  ", "MarkerMap::getImage", __FILE__,
@@ -432,7 +432,7 @@ namespace aruco
         str >> dictionary;
     }
     pair<cv::Mat, cv::Mat> MarkerMap::calculateExtrinsics(const std::vector<aruco::Marker>& markers, float markerSize,
-                                                          cv::Mat CameraMatrix, cv::Mat Distorsion) throw(cv::Exception)
+                                                          cv::Mat CameraMatrix, cv::Mat Distorsion)
     {
         vector<cv::Point2f> p2d;
         MarkerMap m_meters;

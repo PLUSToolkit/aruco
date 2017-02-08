@@ -79,7 +79,7 @@ namespace aruco
      *
      ************************************/
 
-    std::vector<aruco::Marker> MarkerDetector::detect(const cv::Mat& input) throw(cv::Exception)
+    std::vector<aruco::Marker> MarkerDetector::detect(const cv::Mat& input)
     {
         std::vector<Marker> detectedMarkers;
         detect(input, detectedMarkers);
@@ -88,7 +88,7 @@ namespace aruco
 
     std::vector<aruco::Marker> MarkerDetector::detect(const cv::Mat& input, const CameraParameters& camParams,
                                                       float markerSizeMeters,
-                                                      bool setYPerperdicular) throw(cv::Exception)
+                                                      bool setYPerperdicular)
     {
         std::vector<Marker> detectedMarkers;
         detect(input, detectedMarkers, camParams, markerSizeMeters, setYPerperdicular);
@@ -102,7 +102,7 @@ namespace aruco
      *
      ************************************/
     void MarkerDetector::detect(const cv::Mat& input, std::vector<Marker>& detectedMarkers, CameraParameters camParams,
-                                float markerSizeMeters, bool setYPerpendicular) throw(cv::Exception)
+                                float markerSizeMeters, bool setYPerpendicular)
     {
         if (camParams.CamSize != input.size() && camParams.isValid() && markerSizeMeters > 0)
         {
@@ -125,7 +125,7 @@ namespace aruco
      *
      ************************************/
     void MarkerDetector::detect(const cv::Mat& input, vector<Marker>& detectedMarkers, Mat camMatrix, Mat distCoeff,
-                                float markerSizeMeters, bool setYPerpendicular) throw(cv::Exception)
+                                float markerSizeMeters, bool setYPerpendicular)
     {
         // omp_set_num_threads(1);
         // it must be a 3 channel image
@@ -555,7 +555,7 @@ namespace aruco
      *
      ************************************/
     void MarkerDetector::thresHold(int method, const Mat& grey, Mat& out, double param1,
-                                   double param2) throw(cv::Exception)
+                                   double param2)
     {
         if (param1 == -1)
             param1 = _params._thresParam1;
@@ -600,7 +600,7 @@ namespace aruco
      *
      *
      ************************************/
-    bool MarkerDetector::warp(Mat& in, Mat& out, Size size, vector<Point2f> points) throw(cv::Exception)
+    bool MarkerDetector::warp(Mat& in, Mat& out, Size size, vector<Point2f> points)
     {
         if (points.size() != 4)
             throw cv::Exception(9001, "point.size()!=4", "MarkerDetector::warp", __FILE__, __LINE__);
@@ -730,7 +730,7 @@ namespace aruco
      *
      *
      ************************************/
-    bool MarkerDetector::warp_cylinder(Mat& in, Mat& out, Size size, MarkerCandidate& mcand) throw(cv::Exception)
+    bool MarkerDetector::warp_cylinder(Mat& in, Mat& out, Size size, MarkerCandidate& mcand)
     {
         if (mcand.size() != 4)
             throw cv::Exception(9001, "point.size()!=4", "MarkerDetector::warp", __FILE__, __LINE__);
@@ -1216,7 +1216,7 @@ namespace aruco
         }
     }
 
-    void MarkerDetector::setMarkerLabeler(cv::Ptr<MarkerLabeler> detector) throw(cv::Exception)
+    void MarkerDetector::setMarkerLabeler(cv::Ptr<MarkerLabeler> detector)
     {
         markerIdDetector = detector;
         if (markerIdDetector->getBestInputSize() != -1)
@@ -1224,14 +1224,14 @@ namespace aruco
     }
 
     void MarkerDetector::setDictionary(Dictionary::DICT_TYPES dict_type,
-                                       float error_correction_rate) throw(cv::Exception)
+                                       float error_correction_rate)
     {
         markerIdDetector = MarkerLabeler::create(dict_type, error_correction_rate);
         if (markerIdDetector->getBestInputSize() != -1)
             setWarpSize(markerIdDetector->getBestInputSize());
     }
 
-    void MarkerDetector::setDictionary(string dict_type, float error_correction_rate) throw(cv::Exception)
+    void MarkerDetector::setDictionary(string dict_type, float error_correction_rate)
     {
         markerIdDetector = MarkerLabeler::create(dict_type, std::to_string(error_correction_rate));
         if (markerIdDetector->getBestInputSize() != -1)

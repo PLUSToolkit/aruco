@@ -93,7 +93,7 @@ namespace aruco
     /**
      *
     */
-    void Marker::glGetModelViewMatrix(double modelview_matrix[16]) throw(cv::Exception)
+    void Marker::glGetModelViewMatrix(double modelview_matrix[16])
     {
         // check if paremeters are valid
         bool invalid = false;
@@ -150,7 +150,7 @@ namespace aruco
     /****
      *
      */
-    void Marker::OgreGetPoseParameters(double position[3], double orientation[4]) throw(cv::Exception)
+    void Marker::OgreGetPoseParameters(double position[3], double orientation[4])
     {
         // check if paremeters are valid
         bool invalid = false;
@@ -275,7 +275,7 @@ namespace aruco
     /**
      */
     void Marker::calculateExtrinsics(float markerSize, const CameraParameters& CP,
-                                     bool setYPerpendicular) throw(cv::Exception)
+                                     bool setYPerpendicular)
     {
         if (!CP.isValid())
             throw cv::Exception(9004,
@@ -291,7 +291,7 @@ namespace aruco
     /**
      */
     void Marker::calculateExtrinsics(float markerSizeMeters, cv::Mat camMatrix, cv::Mat distCoeff,
-                                     bool setYPerpendicular) throw(cv::Exception)
+                                     bool setYPerpendicular)
     {
         if (!isValid())
             throw cv::Exception(9004, "!isValid(): invalid marker. It is not possible to calculate extrinsics",

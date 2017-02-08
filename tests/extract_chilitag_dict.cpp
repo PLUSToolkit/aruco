@@ -19,7 +19,7 @@ bitset<64> fromString(std::string str)
     return bs;
 }
 
-uint64_t process(string file) throw(std::runtime_error)
+uint64_t process(string file)
 {
     cv::Mat im = cv::imread(file, cv::IMREAD_GRAYSCALE);
     if (im.total() != 100)

@@ -151,7 +151,7 @@ namespace aruco
     }
 
     void MarkerMapPoseTracker::setParams(const CameraParameters& cam_params, const MarkerMap& msconf,
-                                         float markerSize) throw(cv::Exception)
+                                         float markerSize)
     {
         _msconf = msconf;
         _cam_params = cam_params;

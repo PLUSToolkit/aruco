@@ -359,7 +359,7 @@ vector<cv::Vec4f> getMarkerIdPcd(aruco::Marker3DInfo& minfo, cv::Scalar color)
 }
 
 void savePCDFile(string fpath, const aruco::MarkerMap& ms,
-                 const std::map<int, cv::Mat> frame_pose_map) throw(std::exception)
+                 const std::map<int, cv::Mat> frame_pose_map)
 {
     std::vector<cv::Vec4f> points2write;
     for (auto m : ms)
