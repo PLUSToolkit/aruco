@@ -42,9 +42,9 @@ vector<Marker> TheMarkers;
 Mat TheInputImage, TheInputImageCopy;
 CameraParameters TheCameraParameters;
 void cvTackBarEvents(int pos, void*);
-
+string dictionaryString;
 pair<double, double> AvrgTime(0, 0);  // determines the average time required for detection
-int iThresParam1, iThresParam2,iEnclosedMarkers=0;
+int iThresParam1, iThresParam2,iEnclosedMarkers=0,iCorrectionRate=0;
 int waitTime = 0;
 class CmdLineParser
 {
@@ -101,7 +101,7 @@ int main(int argc, char** argv)
         if (argc < 2 || cml["-h"])
         {
             cerr << "Invalid number of arguments" << endl;
-            cerr << "Usage: (in.avi|live[:idx_cam=0]) [-c camera_params.yml] [-s  marker_size_in_meters] [-d "
+            cerr << "Usage: (in.avi|live[:camera_index(e.g 0 or 1)]) [-c camera_params.yml] [-s  marker_size_in_meters] [-d "
                     "dictionary:ARUCO by default] [-h]"
                  << endl;
             cerr << "\tDictionaries: ";
@@ -149,12 +149,10 @@ int main(int argc, char** argv)
         TheVideoCapturer >> TheInputImage;
         if (TheCameraParameters.isValid())
             TheCameraParameters.resize(TheInputImage.size());
-
-        MDetector.setDictionary(
-            cml("-d", "ARUCO"));  // sets the dictionary to be employed (ARUCO,APRILTAGS,ARTOOLKIT,etc)
+        dictionaryString=cml("-d", "ARUCO");
+        MDetector.setDictionary(dictionaryString,float(iCorrectionRate)/10. );  // sets the dictionary to be employed (ARUCO,APRILTAGS,ARTOOLKIT,etc)
         MDetector.setThresholdParams(7, 7);
         MDetector.setThresholdParamRange(2, 0);
-        //  MDetector.setCornerRefinementMethod(aruco::MarkerDetector::SUBPIX);
 
         // gui requirements : the trackbars to change this parameters
         iThresParam1 = MDetector.getParams()._thresParam1;
@@ -162,11 +160,12 @@ int main(int argc, char** argv)
         cv::namedWindow("in");
         cv::createTrackbar("ThresParam1", "in", &iThresParam1, 25, cvTackBarEvents);
         cv::createTrackbar("ThresParam2", "in", &iThresParam2, 13, cvTackBarEvents);
+        cv::createTrackbar("correction_rate", "in", &iCorrectionRate, 10, cvTackBarEvents);
         cv::createTrackbar("EnclosedMarkers", "in", &iEnclosedMarkers, 1, cvTackBarEvents);
 
         // go!
         char key = 0;
-        int index = 0;
+        int index = 0,indexSave=0;
         // capture until press ESC or until the end of the video
         do
         {
@@ -206,7 +205,15 @@ int main(int argc, char** argv)
             key = cv::waitKey(waitTime);  // wait for key to be pressed
             if (key == 's')
                 waitTime = waitTime == 0 ? 10 : 0;
+            if (key == 'w'){//writes current input image
+                string number=std::to_string(indexSave++);
+                while(number.size()!=3)number+="0";
+                string imname="arucoimage"+number+".png";
+                cv::imwrite(imname,TheInputImage);
+                cout<<"saved "<<imname<<endl;
+            }
             index++;  // number of images captured
+
         } while (key != 27 && (TheVideoCapturer.grab()));
     }
     catch (std::exception& ex)
@@ -239,6 +246,15 @@ void cvTackBarEvents(int pos, void*)
          params._cornerMethod=aruco::MarkerDetector::SUBPIX;
         MDetector.setParams(params);
     }
+    else{
+        auto params=MDetector.getParams();
+        params._doErosion=false;
+         params._cornerMethod=aruco::MarkerDetector::LINES;
+        MDetector.setParams(params);
+    }
+
+    MDetector.setDictionary(dictionaryString,float(iCorrectionRate)/10. );  // sets the dictionary to be employed (ARUCO,APRILTAGS,ARTOOLKIT,etc)
+
     // recompute
     MDetector.detect(TheInputImage, TheMarkers, TheCameraParameters);
     TheInputImage.copyTo(TheInputImageCopy);

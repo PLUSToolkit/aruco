@@ -246,18 +246,19 @@ namespace aruco
             return;
         if (lineWidth == -1)  // auto
             lineWidth = std::max(1.f, float(in.cols) / 1000.f);
+        //lines connecting points
         cv::line(in, (*this)[0], (*this)[1], color, lineWidth, CV_AA);
         cv::line(in, (*this)[1], (*this)[2], color, lineWidth, CV_AA);
         cv::line(in, (*this)[2], (*this)[3], color, lineWidth, CV_AA);
         cv::line(in, (*this)[3], (*this)[0], color, lineWidth, CV_AA);
         auto p2 = Point2f(2 * lineWidth, 2 * lineWidth);
+        //points in the corners
         cv::rectangle(in, (*this)[0] - p2, (*this)[0] + p2, Scalar(0, 0, 255, 255), lineWidth, CV_AA);
         cv::rectangle(in, (*this)[1] - p2, (*this)[1] + p2, Scalar(0, 255, 0, 255), lineWidth, CV_AA);
         cv::rectangle(in, (*this)[2] - p2, (*this)[2] + p2, Scalar(255, 0, 0, 255), lineWidth, CV_AA);
+
         if (writeId)
         {
-            char cad[100];
-            sprintf(cad, "id=%d", id);
             // determine the centroid
             Point cent(0, 0);
             for (int i = 0; i < 4; i++)
@@ -267,7 +268,7 @@ namespace aruco
             }
             cent.x /= 4.;
             cent.y /= 4.;
-            putText(in, cad, cent, FONT_HERSHEY_SIMPLEX, std::max(0.5f, float(lineWidth) * 0.3f),
+            putText(in, std::to_string(id), cent, FONT_HERSHEY_SIMPLEX, std::max(0.5f, float(lineWidth) * 0.3f),
                     Scalar(255 - color[0], 255 - color[1], 255 - color[2], 255), std::max(lineWidth, 2));
         }
     }
