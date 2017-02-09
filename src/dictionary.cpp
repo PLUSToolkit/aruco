@@ -59,15 +59,7 @@ else return loadFromFile(info);
 
 
 Dictionary Dictionary::loadFromFile(std::string path) throw(cv::Exception){
-    auto getImage=[](uint64_t tag,int nbits){
-        std::bitset<64> bs(tag);
-        cv::Mat im(nbits,nbits,CV_8UC1);
-        int bit=(nbits*nbits)-1;
-        for(int i=0;i<nbits;i++)
-            for(int j=0;j<nbits;j++)
-                im.at<uchar>(i,j)=bs[bit--];
-        return im;
-    };
+
     auto parse=[](const string &str){
       stringstream sstr(str);
       string a,b;
@@ -496,8 +488,8 @@ uint64_t Dictionary::computeDictionaryDistance(const Dictionary &dict){
     //now, compute minimum distance
      std::map<uint64_t,std::set<uint64_t> >errors;
     uint64_t mind=std::numeric_limits<uint64_t>::max();
-    for(int i=0;i<all_rotations.size();i++){
-        for(int j=0;j<all_rotations.size();j++){
+    for(size_t i=0;i<all_rotations.size();i++){
+        for(size_t j=0;j<all_rotations.size();j++){
             if (i!=j){
 
                 auto d=bitset<64>(all_rotations[i]^all_rotations[j]).count();
