@@ -114,7 +114,7 @@ namespace aruco
          */
         unsigned int MarkerCode::selfDistance(unsigned int& minRot) const
         {
-            unsigned int res = _bits[0].size();  // init to n*n (max value)
+            unsigned int res = static_cast<unsigned int>(_bits[0].size());  // init to n*n (max value)
             for (unsigned int i = 1; i < 4; i++)
             {  // self distance is not calculated for rotation 0
                 unsigned int hammdist = hammingDistance(_bits[0], _bits[i]);
@@ -131,7 +131,7 @@ namespace aruco
          */
         unsigned int MarkerCode::distance(const MarkerCode& m, unsigned int& minRot) const
         {
-            unsigned int res = _bits[0].size();  // init to n*n (max value)
+            unsigned int res = static_cast<unsigned int>(_bits[0].size());  // init to n*n (max value)
             for (unsigned int i = 0; i < 4; i++)
             {
                 unsigned int hammdist = hammingDistance(_bits[0], m.getRotation(i));
@@ -309,7 +309,7 @@ namespace aruco
             _D = D;
             _n = _D[0].n();
             _ncellsBorder = (_D[0].n() + 2);
-            _correctionDistance = correctionDistanceRate * ((D.tau0 - 1) / 2);
+            _correctionDistance = static_cast<int>(correctionDistanceRate * ((D.tau0 - 1) / 2));
             cerr << "aruco :: _correctionDistance = " << _correctionDistance << endl;
             _binaryTree.loadDictionary(&D);
             return true;
@@ -444,7 +444,7 @@ namespace aruco
             visited.resize(_orderD.size(), false);
 
             // calculate position of the root element
-            unsigned int rootIdx = _orderD.size() / 2;
+            unsigned int rootIdx = static_cast<unsigned int>(_orderD.size()) / 2;
             visited[rootIdx] = true;  // mark it as visited
             _root = rootIdx;
 
@@ -454,7 +454,7 @@ namespace aruco
             std::vector<std::pair<unsigned int, unsigned int>> intervals;
             // first, add the two intervals at each side of root element
             intervals.push_back(std::pair<unsigned int, unsigned int>(0, rootIdx));
-            intervals.push_back(std::pair<unsigned int, unsigned int>(rootIdx, _orderD.size()));
+            intervals.push_back(std::pair<unsigned int, unsigned int>(rootIdx, static_cast<unsigned int>(_orderD.size())));
 
             // init the tree
             _binaryTree.clear();
@@ -466,14 +466,14 @@ namespace aruco
             else
                 _binaryTree[rootIdx].first = -1;
             if (!visited[(rootIdx + _orderD.size()) / 2])
-                _binaryTree[rootIdx].second = (rootIdx + _orderD.size()) / 2;
+                _binaryTree[rootIdx].second = static_cast<int>(rootIdx + _orderD.size()) / 2;
             else
                 _binaryTree[rootIdx].second = -1;
 
             // for each tree level
             for (unsigned int i = 1; i < levels; i++)
             {
-                unsigned int nintervals = intervals.size();  // count number of intervals and process them
+                unsigned int nintervals = static_cast<unsigned int>(intervals.size());  // count number of intervals and process them
                 for (unsigned int j = 0; j < nintervals; j++)
                 {
                     // store interval information and delete it

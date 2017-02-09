@@ -83,7 +83,7 @@ cv::Mat resize(const cv::Mat& in, int width)
         return in;
     float yf = float(width) / float(in.size().width);
     cv::Mat im2;
-    cv::resize(in, im2, cv::Size(width, float(in.size().height) * yf));
+    cv::resize(in, im2, cv::Size(width, static_cast<int>(in.size().height * yf)));
     return im2;
 }
 
@@ -157,8 +157,8 @@ int main(int argc, char** argv)
         //  MDetector.setCornerRefinementMethod(aruco::MarkerDetector::SUBPIX);
 
         // gui requirements : the trackbars to change this parameters
-        iThresParam1 = MDetector.getParams()._thresParam1;
-        iThresParam2 = MDetector.getParams()._thresParam2;
+        iThresParam1 = static_cast<int>(MDetector.getParams()._thresParam1);
+        iThresParam2 = static_cast<int>(MDetector.getParams()._thresParam2);
         cv::namedWindow("in");
         cv::createTrackbar("ThresParam1", "in", &iThresParam1, 25, cvTackBarEvents);
         cv::createTrackbar("ThresParam2", "in", &iThresParam2, 13, cvTackBarEvents);

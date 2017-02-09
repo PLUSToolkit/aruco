@@ -51,7 +51,7 @@ int main(int argc, char** argv)
     auto getNumber = [](const string& s) {
         // find point
         int point;
-        for (point = s.size() - 1; point > 0; point--)
+        for (point = static_cast<int>(s.size()) - 1; point > 0; point--)
             if (s[point] == '.')
                 break;
         int start = point - 1;

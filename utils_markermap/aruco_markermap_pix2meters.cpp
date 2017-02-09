@@ -42,7 +42,7 @@ int main(int argc, char** argv)
         }
         aruco::MarkerMap BInfo;
         BInfo.readFromFile(argv[1]);
-        BInfo.convertToMeters(atof(argv[2])).saveToFile(argv[3]);
+        BInfo.convertToMeters(static_cast<float>(atof(argv[2]))).saveToFile(argv[3]);
     }
     catch (std::exception& ex)
     {

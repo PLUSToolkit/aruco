@@ -55,11 +55,11 @@ void getMarker2d_3d(vector<cv::Point2f>& p2d, vector<cv::Point3f>& p3d, const ve
     for (size_t i = 0; i < markers_detected.size(); i++)
     {
         // find it in the bc
-        int fidx = -1;
+        size_t fidx = std::string::npos;
         for (size_t j = 0; j < bc.size() && fidx == -1; j++)
             if (bc[j].id == markers_detected[i].id)
                 fidx = j;
-        if (fidx != -1)
+        if (fidx != std::string::npos)
         {
             for (int j = 0; j < 4; j++)
             {
@@ -82,7 +82,7 @@ int parseInput(int argc, char** argv)
     {
         if (string(argv[i]) == "-size")
         {
-            TheMarkerSize = atof(argv[i + 1]);
+            TheMarkerSize = static_cast<float>(atof(argv[i + 1]));
             lastOption = i + 2;
         }
         if (string(argv[i]) == "-m")
@@ -141,12 +141,12 @@ int main(int argc, char** argv)
 
         // set specific parameters for this configuration
         MarkerDetector::Params params;
-        params._borderDistThres = .01;  // acept markers near the borders
-        params._maxSize = 0.9;
+        params._borderDistThres = .01f;  // acept markers near the borders
+        params._maxSize = 0.9f;
         params._thresParam1 = 5;
         params._thresParam1_range = 10;                                    // search in wide range of values for param1
         params._cornerMethod = MarkerDetector::SUBPIX;                     // use subpixel corner refinement
-        params._subpix_wsize = (10. / 2000.) * float(TheInputImage.cols);  // search corner subpix in a  widow area
+        params._subpix_wsize = static_cast<int>((10.f / 2000.f) * float(TheInputImage.cols));  // search corner subpix in a  widow area
         cout << params._subpix_wsize << " " << float(TheInputImage.cols) << endl;
         TheMarkerDetector.setParams(params);  // set the params above
         TheMarkerDetector.setDictionary(TheMarkerMapConfig.getDictionary());
@@ -173,11 +173,11 @@ int main(int argc, char** argv)
                 TheInputImage.copyTo(TheInputImageCopy);
                 for (auto idx : markers_from_set)
                     detected_markers[idx].draw(TheInputImageCopy, Scalar(0, 0, 255),
-                                               std::max(float(1.f), 1.5f * float(TheInputImageCopy.cols) / 1000.f));
+                       static_cast<int>(std::max(float(1.f), 1.5f * float(TheInputImageCopy.cols) / 1000.f)));
 
                 if (TheInputImageCopy.cols > 1280)
                     cv::resize(TheInputImageCopy, TheInputImage,
-                               cv::Size(1280, 1280. * float(TheInputImageCopy.rows) / float(TheInputImageCopy.cols)));
+                               cv::Size(1280, static_cast<int>(1280.f * float(TheInputImageCopy.rows) / float(TheInputImageCopy.cols))));
                 else
                     TheInputImageCopy.copyTo(TheInputImage);
 
