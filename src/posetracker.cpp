@@ -214,8 +214,8 @@ namespace aruco
                     _tvec.create(1, 3, CV_32F);
                     for (int i = 0; i < 3; i++)
                     {
-                        _rvec.ptr<float>(0)[i] = rv.at<double>(i, 0);
-                        _tvec.ptr<float>(0)[i] = tv.at<double>(i, 0);
+                        _rvec.ptr<float>(0)[i] = static_cast<float>(rv.at<double>(i, 0));
+                        _tvec.ptr<float>(0)[i] = static_cast<float>(tv.at<double>(i, 0));
                     }
                 }
             }

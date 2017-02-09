@@ -11,7 +11,7 @@ namespace aruco
     {
         _dic = dic;
         max_correction_rate = std::max(0.f, std::min(1.0f, max_correction_rate));
-        _maxCorrectionAllowed = float(_dic.tau()) * max_correction_rate;
+        _maxCorrectionAllowed = static_cast<int>( static_cast<float>(_dic.tau()) * max_correction_rate);
     }
 
     std::string DictionaryBased::getName() const
@@ -34,7 +34,7 @@ namespace aruco
 
     int hamm_distance(uint64_t a, uint64_t b)
     {
-        return std::bitset<64>(a ^ b).count();
+        return static_cast<int>(std::bitset<64>(a ^ b).count());
     }
 
     bool DictionaryBased::detect(const cv::Mat& in, int& marker_id, int& nRotations)
@@ -88,7 +88,7 @@ namespace aruco
 
     bool DictionaryBased::getInnerCode(const cv::Mat& thres_img, int total_nbits, std::vector<uint64_t>& ids)
     {
-        int bits_a = sqrt(total_nbits);
+        int bits_a = static_cast<int>(std::sqrt(total_nbits));
         int bits_a2 = bits_a + 2;
         // Markers  are divided in (bits_a+2)x(bits_a+2) regions, of which the inner bits_axbits_a belongs to marker
         // info

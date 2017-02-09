@@ -110,11 +110,11 @@ namespace aruco
                 _thresParam1_range = 0;
                 _markerWarpSize = 56;
 
-                _minSize = 0.04;
-                _maxSize = 0.95;
+                _minSize = 0.04f;
+                _maxSize = 0.95f;
                 _minSize_pix = 25;
                 _borderDistThres =
-                    0.005;          // corners at a distance from image boundary nearer than 2.5% of image are ignored
+                    0.005f;          // corners at a distance from image boundary nearer than 2.5% of image are ignored
                 _subpix_wsize = 5;  // window size employed for subpixel search (in vase you use _cornerMethod=SUBPIX
                 _doErosion=false;
             }
@@ -268,7 +268,7 @@ namespace aruco
          */
         void setThresholdParamRange(size_t r1 = 0, size_t r2 = 0)
         {
-            _params._thresParam1_range = r1;
+            _params._thresParam1_range = static_cast<double>(r1);
             (void)(r2);
         }
 

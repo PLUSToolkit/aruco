@@ -152,13 +152,13 @@ namespace aruco
 
         /// Do threshold the image and detect contours
         // work simultaneouly in a range of values of the first threshold
-        int n_param1 = 2 * _params._thresParam1_range + 1;
+        int n_param1 = 2 * static_cast<int>(_params._thresParam1_range) + 1;
         vector<cv::Mat> thres_images;
 
         // compute the different values of param1
 
         vector<int> p1_values;
-        for (int i = std::max(3., _params._thresParam1 - 2 * _params._thresParam1_range);
+        for (int i = static_cast<int>(std::max(3., _params._thresParam1 - 2. * _params._thresParam1_range));
              i <= _params._thresParam1 + 2 * _params._thresParam1_range; i += 2)
             p1_values.push_back(i);
         if (_params._doErosion)
@@ -181,7 +181,7 @@ namespace aruco
         vector<MarkerCandidate> MarkerCanditates;
         detectRectangles(thres_images, MarkerCanditates);
 
-        float desiredarea = _params._markerWarpSize * _params._markerWarpSize;
+        float desiredarea = std::pow(static_cast<float>(_params._markerWarpSize), 2.f);
         /// identify the markers
         vector<vector<Marker>> markers_omp(omp_get_max_threads());
         vector<vector<std::vector<cv::Point2f>>> candidates_omp(omp_get_max_threads());
@@ -198,7 +198,7 @@ namespace aruco
             // warping is one of the most time consuming operations, especially when the region is large.
             // To reduce computing time, let us find in the image pyramid, the best configuration to save time
             // indicates how much bigger observation is wrt to desired patch
-            int imgPyrIdx = 0;
+            size_t imgPyrIdx = 0;
             for (size_t p = 1; p < imagePyramid.size(); p++)
             {
                 if (MarkerCanditates[i].getArea() / pow(4, p) >= desiredarea)
@@ -277,8 +277,8 @@ namespace aruco
         }
 
         // remove markers with corners too near the image limits
-        int borderDistThresX = _params._borderDistThres * float(input.cols);
-        int borderDistThresY = _params._borderDistThres * float(input.rows);
+        int borderDistThresX = static_cast<int>(_params._borderDistThres * float(input.cols));
+        int borderDistThresY =  static_cast<int>(_params._borderDistThres * float(input.rows));
         for (size_t i = 0; i < detectedMarkers.size(); i++)
         {
             // delete if any of the corners is too near image border
@@ -333,9 +333,10 @@ namespace aruco
         // omp_set_num_threads ( 1 );
         vector<vector<MarkerCandidate>> MarkerCanditatesV(omp_get_max_threads());
         // calcualte the min_max contour sizes
-        int maxSize = _params._maxSize * std::max(thresImgv[0].cols, thresImgv[0].rows) * 4;
+        int maxSize = static_cast<int>(_params._maxSize) * std::max(thresImgv[0].cols, thresImgv[0].rows) * 4;
         int minSize =
-            std::min(float(_params._minSize_pix), _params._minSize* std::max(thresImgv[0].cols, thresImgv[0].rows) * 4);
+            std::min(static_cast<int>(_params._minSize_pix), static_cast<int>(_params._minSize)*
+                     std::max(thresImgv[0].cols, thresImgv[0].rows) * 4);
 //#define _aruco_debug_detectrectangles
 #ifdef _aruco_debug_detectrectangles
         cv::Mat input;
@@ -393,7 +394,8 @@ namespace aruco
                                 MarkerCanditatesV[omp_get_thread_num()].back().contour = contours2[i];
                             for (int j = 0; j < 4; j++)
                                 MarkerCanditatesV[omp_get_thread_num()].back().push_back(
-                                    Point2f(approxCurve[j].x, approxCurve[j].y));
+                                    Point2f(static_cast<float>(approxCurve[j].x),
+                                            static_cast<float>(approxCurve[j].y)));
                         }
                     }
                 }
@@ -506,10 +508,10 @@ namespace aruco
                                               double param1_range, double param2, double param2_range)
     {
         //    param2_range=2;
-        int start_p1 = std::max(3., param1 - 2 * param1_range);
-        int end_p1 = param1 + 2 * param1_range;
-        int start_p2 = std::max(3., param2 - 2 * param2_range);
-        int end_p2 = param2 + 2 * param2_range;
+        int start_p1 = static_cast<int>(std::max(3., param1 - 2 * param1_range));
+        int end_p1 = static_cast<int>(param1 + 2. * param1_range);
+        int start_p2 = static_cast<int>(std::max(3., param2 - 2. * param2_range));
+        int end_p2 = static_cast<int>(param2 + 2. * param2_range);
         vector<std::pair<int, int>> p1_2_values;
         for (int i = start_p1; i <= end_p1; i += 2)
             for (int j = start_p2; j <= end_p2; j += 2)
@@ -524,7 +526,7 @@ namespace aruco
         {
             //  cout<<p1_2_values[i].first<<" "<<p1_2_values[i].second<<endl;
             // now, for each image, apply the
-            float inv_area = 1. / (p1_2_values[i].first * p1_2_values[i].first);
+            float inv_area = 1.f / (p1_2_values[i].first * p1_2_values[i].first);
             int wsize_2 = p1_2_values[i].first / 2;
             outThresImages[i].create(grey.size(), grey.type());
             // start moving accross the image
@@ -576,7 +578,8 @@ namespace aruco
             else if (((int)param1) % 2 != 1)
                 param1 = (int)(param1 + 1);
 
-            cv::adaptiveThreshold(grey, out, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY_INV, param1, param2);
+            cv::adaptiveThreshold(grey, out, 255., ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY_INV,
+                                  static_cast<int>(param1), static_cast<int>(param2));
             break;
         case CANNY:
         {
@@ -609,9 +612,9 @@ namespace aruco
         for (int i = 0; i < 4; i++)
             pointsIn[i] = points[i];
         pointsRes[0] = (Point2f(0, 0));
-        pointsRes[1] = Point2f(size.width - 1, 0);
-        pointsRes[2] = Point2f(size.width - 1, size.height - 1);
-        pointsRes[3] = Point2f(0, size.height - 1);
+        pointsRes[1] = Point2f(static_cast<float>(size.width - 1), 0.f);
+        pointsRes[2] = Point2f(static_cast<float>(size.width - 1), static_cast<float>(size.height - 1));
+        pointsRes[3] = Point2f(0.f, static_cast<float>(size.height - 1));
         Mat M = getPerspectiveTransform(pointsIn, pointsRes);
         cv::warpPerspective(in, out, M, size, cv::INTER_NEAREST);
         return true;
@@ -624,29 +627,29 @@ namespace aruco
         int idxSegments[4] = {-1, -1, -1, -1};
         // the first point coincides with one
         cv::Point points2i[4];
-        for (int i = 0; i < 4; i++)
+        for (size_t i = 0; i < 4; i++)
         {
-            points2i[i].x = points[i].x;
-            points2i[i].y = points[i].y;
+            points2i[i].x = static_cast<int>(points[i].x);
+            points2i[i].y = static_cast<int>(points[i].y);
         }
 
         for (size_t i = 0; i < contour.size(); i++)
         {
             if (idxSegments[0] == -1)
                 if (contour[i] == points2i[0])
-                    idxSegments[0] = i;
+                    idxSegments[0] = static_cast<int>(i);
             if (idxSegments[1] == -1)
                 if (contour[i] == points2i[1])
-                    idxSegments[1] = i;
+                    idxSegments[1] = static_cast<int>(i);
             if (idxSegments[2] == -1)
                 if (contour[i] == points2i[2])
-                    idxSegments[2] = i;
+                    idxSegments[2] = static_cast<int>(i);
             if (idxSegments[3] == -1)
                 if (contour[i] == points2i[3])
-                    idxSegments[3] = i;
+                    idxSegments[3] = static_cast<int>(i);
         }
         idxs.resize(4);
-        for (int i = 0; i < 4; i++)
+        for (size_t i = 0; i < 4; i++)
             idxs[i] = idxSegments[i];
     }
 
@@ -660,7 +663,7 @@ namespace aruco
         {
             cv::Point p1 = contour[idxSegments[i]];
             cv::Point p2 = contour[idxSegments[i + 1]];
-            float inv_den = 1. / sqrt(float((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y)));
+            float inv_den = 1.f / std::sqrt(float((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y)));
             //   d=|v^^·r|=(|(x_2-x_1)(y_1-y_0)-(x_1-x_0)(y_2-y_1)|)/(sqrt((x_2-x_1)^2+(y_2-y_1)^2)).
             //         cerr<<"POSS="<<idxSegments[i]<<" "<<idxSegments[i+1]<<endl;
             for (int j = idxSegments[i]; j < idxSegments[i + 1]; j++)
@@ -679,7 +682,7 @@ namespace aruco
         // for the last one
         cv::Point p1 = contour[idxSegments[0]];
         cv::Point p2 = contour[idxSegments[3]];
-        float inv_den = 1. / std::sqrt(float((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y)));
+        float inv_den = 1.f / std::sqrt(float((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y)));
         //   d=|v^^·r|=(|(x_2-x_1)(y_1-y_0)-(x_1-x_0)(y_2-y_1)|)/(sqrt((x_2-x_1)^2+(y_2-y_1)^2)).
         for (int j = 0; j < idxSegments[0]; j++)
             distSum[3] +=
@@ -706,11 +709,11 @@ namespace aruco
         if (p.x < 0)
             p.x = 0;
         else if (p.x >= s.width)
-            p.x = s.width - 1;
+            p.x = static_cast<float>(s.width - 1);
         if (p.y < 0)
             p.y = 0;
         else if (p.y >= s.height)
-            p.y = s.height - 1;
+            p.y = static_cast<float>(s.height - 1);
     }
 
     void setPointIntoImage(cv::Point& p, cv::Size s)
@@ -804,11 +807,12 @@ namespace aruco
             pointsIn[i] = mcand[i];
 
         cv::Size enlargedSize = size;
-        enlargedSize.width += 2 * enlargedSize.width * 0.2;
-        pointsRes[0] = (Point2f(0, 0));
-        pointsRes[1] = Point2f(enlargedSize.width - 1, 0);
-        pointsRes[2] = Point2f(enlargedSize.width - 1, enlargedSize.height - 1);
-        pointsRes[3] = Point2f(0, enlargedSize.height - 1);
+        enlargedSize.width += static_cast<int>(2 * enlargedSize.width * 0.2);
+        pointsRes[0] = Point2f(0.f, 0.f);
+        pointsRes[1] = Point2f(static_cast<float>(enlargedSize.width - 1), 0.f);
+        pointsRes[2] = Point2f(static_cast<float>(enlargedSize.width - 1),
+                               static_cast<float>(enlargedSize.height - 1));
+        pointsRes[3] = Point2f(0.f, static_cast<float>(enlargedSize.height - 1));
         // rotate to ensure that deformed sides are in the horizontal axis when warping
         if (defrmdSide == 0)
             rotate(pointsRes, pointsRes + 1, pointsRes + 4);
@@ -826,12 +830,12 @@ namespace aruco
 
         for (size_t i = 0; i < mcand.contour.size(); i++)
         {
-            float inX = mcand.contour[i].x;
-            float inY = mcand.contour[i].y;
-            float w = inX * mptr[6] + inY * mptr[7] + mptr[8];
+            double inX = static_cast<double>(mcand.contour[i].x);
+            double inY = static_cast<double>(mcand.contour[i].y);
+            double w = inX * mptr[6] + inY * mptr[7] + mptr[8];
             cv::Point2f pres;
-            pointsCO[i].x = ((inX * mptr[0] + inY * mptr[1] + mptr[2]) / w) + 0.5;
-            pointsCO[i].y = ((inX * mptr[3] + inY * mptr[4] + mptr[5]) / w) + 0.5;
+            pointsCO[i].x = static_cast<int> ( ((inX * mptr[0] + inY * mptr[1] + mptr[2]) / w) + 0.5);
+            pointsCO[i].y = static_cast<int> ( ((inX * mptr[3] + inY * mptr[4] + mptr[5]) / w) + 0.5);
             // make integers
             setPointIntoImage(pointsCO[i], imAux.size());  // ensure points are into image limits
             // 	cout<<"p="<<pointsCO[i]<<" "<<imAux.size().width<<" "<<imAux.size().height<<endl;
@@ -905,7 +909,8 @@ namespace aruco
         for (unsigned int i = 0; i < a.size(); i++)
         {
             int i2 = (i + 1) % a.size();
-            sum += sqrt((a[i].x - a[i2].x) * (a[i].x - a[i2].x) + (a[i].y - a[i2].y) * (a[i].y - a[i2].y));
+            sum += static_cast<int>( sqrt((a[i].x - a[i2].x) * (a[i].x - a[i2].x) +
+                                          (a[i].y - a[i2].y) * (a[i].y - a[i2].y)));
         }
         return sum;
     }
@@ -949,7 +954,8 @@ namespace aruco
         if (!camMatrix.empty() && !distCoeff.empty())
         {
             for (unsigned int i = 0; i < candidate.contour.size(); i++)
-                contour2f.push_back(cv::Point2f(candidate.contour[i].x, candidate.contour[i].y));
+                contour2f.push_back(cv::Point2f(static_cast<float>(candidate.contour[i].x),
+                                                static_cast<float>(candidate.contour[i].y)));
             if (!camMatrix.empty() && !distCoeff.empty())
                 cv::undistortPoints(contour2f, contour2f, camMatrix, distCoeff, cv::Mat(), camMatrix);
         }
@@ -957,7 +963,7 @@ namespace aruco
         {
             contour2f.reserve(candidate.contour.size());
             for (auto p : candidate.contour)
-                contour2f.push_back(cv::Point2f(p.x, p.y));
+                contour2f.push_back(cv::Point2f(static_cast<float>(p.x), static_cast<float>(p.y)));
         }
 
         vector<std::vector<cv::Point2f>> contourLines;
@@ -969,7 +975,7 @@ namespace aruco
                 if (j == (int)candidate.contour.size() && !inverse)
                     j = 0;
                 else if (j == 0 && inverse)
-                    j = candidate.contour.size() - 1;
+                    j = static_cast<int>(candidate.contour.size()) - 1;
                 contourLines[l].push_back(contour2f[j]);
                 if (j == (int)cornerIndex[(l + 1) % 4])
                     break;  // this has to be added because of the previous ifs
@@ -1017,14 +1023,15 @@ namespace aruco
         }
 
         // create matrices of equation system
-        Mat A(inPoints.size(), 2, CV_32FC1, Scalar(0));
-        Mat B(inPoints.size(), 1, CV_32FC1, Scalar(0));
+        const int pointsCount = static_cast<int>(inPoints.size());
+        Mat A(pointsCount, 2, CV_32FC1, Scalar(0));
+        Mat B(pointsCount, 1, CV_32FC1, Scalar(0));
         Mat X;
 
         if (maxX - minX > maxY - minY)
         {
             // Ax + C = y
-            for (size_t i = 0; i < inPoints.size(); i++)
+            for (int i = 0; i < pointsCount; i++)
             {
                 A.at<float>(i, 0) = inPoints[i].x;
                 A.at<float>(i, 1) = 1.;
@@ -1039,7 +1046,7 @@ namespace aruco
         else
         {
             // By + C = x
-            for (size_t i = 0; i < inPoints.size(); i++)
+            for (int i = 0; i < pointsCount; i++)
             {
                 A.at<float>(i, 0) = inPoints[i].y;
                 A.at<float>(i, 1) = 1.;
@@ -1174,11 +1181,12 @@ namespace aruco
 
         for (size_t i = 0; i < Corners.size(); i++)
         {
-            cv::Point2f minLimit(std::max(0, int(Corners[i].x - wsize)), std::max(0, int(Corners[i].y - wsize)));
-            cv::Point2f maxLimit(std::min(grey.cols, int(Corners[i].x + wsize)),
-                                 std::min(grey.rows, int(Corners[i].y + wsize)));
+            cv::Point2f minLimit(std::max(0.f, Corners[i].x - float(wsize)), std::max(0.f, Corners[i].y - float(wsize)));
+            cv::Point2f maxLimit(std::min(static_cast<float>(grey.cols), Corners[i].x + static_cast<float>(wsize)),
+                                 std::min(static_cast<float>(grey.rows), Corners[i].y + static_cast<float>(wsize)));
 
-            cv::Mat reg = grey(cv::Range(minLimit.y, maxLimit.y), cv::Range(minLimit.x, maxLimit.x));
+            cv::Mat reg = grey(cv::Range(static_cast<int>(minLimit.y), static_cast<int>(maxLimit.y)),
+                               cv::Range(static_cast<int>(minLimit.x), static_cast<int>(maxLimit.x)));
             cv::Mat harr, harrint;
             cv::cornerHarris(reg, harr, 3, 3, 0.04);
 
@@ -1189,12 +1197,14 @@ namespace aruco
             {
                 float* h = harr.ptr<float>(y);
                 for (int x = bls_a; x < harr.cols - bls_a; x++)
-                    h[x] = harrint.at<double>(y + bls_a, x + bls_a) - harrint.at<double>(y + bls_a, x)
-                           - harrint.at<double>(y, x + bls_a) + harrint.at<double>(y, x);
+                    h[x] = static_cast<float>(harrint.at<double>(y + bls_a, x + bls_a) -
+                                              harrint.at<double>(y + bls_a, x) -
+                                              harrint.at<double>(y, x + bls_a) +
+                                              harrint.at<double>(y, x));
             }
 
             cv::Point2f best(-1, -1);
-            cv::Point2f center(reg.cols / 2, reg.rows / 2);
+            cv::Point2f center(static_cast<float>(reg.cols / 2), static_cast<float>(reg.rows / 2));
             ;
             double maxv = 0;
             for (int i = 0; i < harr.rows; i++)
@@ -1203,12 +1213,12 @@ namespace aruco
                 float* har = harr.ptr<float>(i);
                 for (int x = 0; x < harr.cols; x++)
                 {
-                    float d = float(fabs(center.x - x) + fabs(center.y - i)) / float(reg.cols / 2 + reg.rows / 2);
-                    float w = 1. - d;
+                    const float d = float(fabs(center.x - x) + fabs(center.y - i)) / float(reg.cols / 2 + reg.rows / 2);
+                    float w = 1.f - d;
                     if (w * har[x] > maxv)
                     {
                         maxv = w * har[x];
-                        best = cv::Point2f(x, i);
+                        best = cv::Point2f(static_cast<float>(x), static_cast<float>(i));
                     }
                 }
             }

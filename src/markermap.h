@@ -60,7 +60,7 @@ namespace aruco
         // returns the distance of the marker side
         float getMarkerSize() const
         {
-            return cv::norm(at(0) - at(1));
+            return static_cast<float>(cv::norm(at(0) - at(1)));
         }
 
     public:

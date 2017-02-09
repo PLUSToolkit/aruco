@@ -245,12 +245,12 @@ namespace aruco
         if (size() != 4)
             return;
         if (lineWidth == -1)  // auto
-            lineWidth = std::max(1.f, float(in.cols) / 1000.f);
+            lineWidth = static_cast<int>(std::max(1.f, float(in.cols) / 1000.f));
         cv::line(in, (*this)[0], (*this)[1], color, lineWidth, CV_AA);
         cv::line(in, (*this)[1], (*this)[2], color, lineWidth, CV_AA);
         cv::line(in, (*this)[2], (*this)[3], color, lineWidth, CV_AA);
         cv::line(in, (*this)[3], (*this)[0], color, lineWidth, CV_AA);
-        auto p2 = Point2f(2 * lineWidth, 2 * lineWidth);
+        auto p2 = Point2f(2.f * static_cast<float>(lineWidth), 2.f * static_cast<float>(lineWidth));
         cv::rectangle(in, (*this)[0] - p2, (*this)[0] + p2, Scalar(0, 0, 255, 255), lineWidth, CV_AA);
         cv::rectangle(in, (*this)[1] - p2, (*this)[1] + p2, Scalar(0, 255, 0, 255), lineWidth, CV_AA);
         cv::rectangle(in, (*this)[2] - p2, (*this)[2] + p2, Scalar(255, 0, 0, 255), lineWidth, CV_AA);
@@ -262,11 +262,11 @@ namespace aruco
             Point cent(0, 0);
             for (int i = 0; i < 4; i++)
             {
-                cent.x += (*this)[i].x;
-                cent.y += (*this)[i].y;
+                cent.x += static_cast<int>((*this)[i].x);
+                cent.y +=  static_cast<int>((*this)[i].y);
             }
-            cent.x /= 4.;
-            cent.y /= 4.;
+            cent.x /= 4;
+            cent.y /= 4;
             putText(in, cad, cent, FONT_HERSHEY_SIMPLEX, std::max(0.5f, float(lineWidth) * 0.3f),
                     Scalar(255 - color[0], 255 - color[1], 255 - color[2], 255), std::max(lineWidth, 2));
         }
@@ -313,15 +313,13 @@ namespace aruco
         ssize = markerSizeMeters;
         // cout<<(*this)<<endl;
     }
+
     vector<cv::Point3f> Marker::get3DPoints(float msize)
     {
-        double halfSize = msize / 2.;
+        float halfSize = msize / 2.f;
         return {cv::Point3f(-halfSize, halfSize, 0), cv::Point3f(halfSize, halfSize, 0),
                 cv::Point3f(halfSize, -halfSize, 0), cv::Point3f(-halfSize, -halfSize, 0)};
     }
-
-    /**
-    */
 
     void Marker::rotateXAxis(Mat& rotation)
     {
@@ -329,7 +327,7 @@ namespace aruco
         Rodrigues(rotation, R);
         // create a rotation matrix for x axis
         cv::Mat RX = cv::Mat::eye(3, 3, CV_32F);
-        float angleRad = 3.14159265359 / 2.;
+        const float angleRad = 3.14159265359f / 2.f;
         RX.at<float>(1, 1) = cos(angleRad);
         RX.at<float>(1, 2) = -sin(angleRad);
         RX.at<float>(2, 1) = sin(angleRad);
@@ -367,7 +365,7 @@ namespace aruco
         cv::Point2f v21 = (*this)[1] - (*this)[2];
         cv::Point2f v23 = (*this)[3] - (*this)[2];
         float area2 = fabs(v21.x * v23.y - v21.y * v23.x);
-        return (area2 + area1) / 2.;
+        return (area2 + area1) / 2.f;
     }
     /**
      */
@@ -376,7 +374,7 @@ namespace aruco
         assert(size() == 4);
         float sum = 0;
         for (int i = 0; i < 4; i++)
-            sum += norm((*this)[i] - (*this)[(i + 1) % 4]);
+            sum += static_cast<float>(norm((*this)[i] - (*this)[(i + 1) % 4]));
         return sum;
     }
     // saves to a binary stream
@@ -388,7 +386,7 @@ namespace aruco
         str.write((char*)Rvec.ptr<float>(0), 3 * sizeof(float));
         str.write((char*)Tvec.ptr<float>(0), 3 * sizeof(float));
         // write the 2d points
-        uint32_t np = size();
+        uint32_t np = static_cast<uint32_t> (size());
         str.write((char*)&np, sizeof(np));
         for (size_t i = 0; i < size(); i++)
             str.write((char*)&at(i), sizeof(cv::Point2f));

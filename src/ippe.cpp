@@ -67,7 +67,7 @@ vector<cv::Mat> IPPE::solvePnP(const vector<cv::Point3f>& objPoints, const std::
                                cv::InputArray cameraMatrix, cv::InputArray distCoeffs)
 {
     cv::Mat Rvec, Tvec;
-    float markerLength = cv::norm(objPoints[1] - objPoints[0]);
+    float markerLength = static_cast<float>(cv::norm(objPoints[1] - objPoints[0]));
     float reprojErr1, reprojErr2;
     cv::Mat Rvec2, Tvec2;
 
@@ -81,7 +81,7 @@ std::vector<std::pair<cv::Mat, double>> IPPE::solvePnP_(const std::vector<cv::Po
                                                         cv::InputArray cameraMatrix, cv::InputArray distCoeffs)
 {
     cv::Mat Rvec, Tvec;
-    float markerLength = cv::norm(objPoints[1] - objPoints[0]);
+    float markerLength = static_cast<float>(cv::norm(objPoints[1] - objPoints[0]));
     float reprojErr1, reprojErr2;
     cv::Mat Rvec2, Tvec2;
 
@@ -198,12 +198,15 @@ int IPPE::IPPEvalBestPose(InputArray _R1, InputArray _R2, InputArray _t1, InputA
     for (int i = 0; i < numPts; i++)
     {
         // projection with first pose solution:
-        px = R1.at<double>(0, 0) * modelPoints.at<Vec3f>(i)(0) + R1.at<double>(0, 1) * modelPoints.at<Vec3f>(i)(1)
-             + R1.at<double>(0, 2) * modelPoints.at<Vec3f>(i)(2) + t1.at<double>(0);
-        py = R1.at<double>(1, 0) * modelPoints.at<Vec3f>(i)(0) + R1.at<double>(1, 1) * modelPoints.at<Vec3f>(i)(1)
-             + R1.at<double>(1, 2) * modelPoints.at<Vec3f>(i)(2) + t1.at<double>(1);
-        pz = R1.at<double>(2, 0) * modelPoints.at<Vec3f>(i)(0) + R1.at<double>(2, 1) * modelPoints.at<Vec3f>(i)(1)
-             + R1.at<double>(2, 2) * modelPoints.at<Vec3f>(i)(2) + t1.at<double>(2);
+        px = static_cast<float>(R1.at<double>(0, 0) * modelPoints.at<Vec3f>(i)(0)) +
+             static_cast<float>(R1.at<double>(0, 1) * modelPoints.at<Vec3f>(i)(1)) +
+             static_cast<float>(R1.at<double>(0, 2) * modelPoints.at<Vec3f>(i)(2) + t1.at<double>(0));
+        py = static_cast<float>(R1.at<double>(1, 0) * modelPoints.at<Vec3f>(i)(0)) +
+             static_cast<float>(R1.at<double>(1, 1) * modelPoints.at<Vec3f>(i)(1)) +
+             static_cast<float>(R1.at<double>(1, 2) * modelPoints.at<Vec3f>(i)(2) + t1.at<double>(1));
+        pz = static_cast<float>(R1.at<double>(2, 0) * modelPoints.at<Vec3f>(i)(0)) +
+             static_cast<float>(R1.at<double>(2, 1) * modelPoints.at<Vec3f>(i)(1)) +
+             static_cast<float>(R1.at<double>(2, 2) * modelPoints.at<Vec3f>(i)(2) + t1.at<double>(2));
 
         dx = px / pz - imgPoints.at<Vec2f>(i)(0);
         dy = py / pz - imgPoints.at<Vec2f>(i)(1);
@@ -211,12 +214,15 @@ int IPPE::IPPEvalBestPose(InputArray _R1, InputArray _R2, InputArray _t1, InputA
         reprojError1 = reprojError1 + sqrt(dx * dx + dy * dy);
 
         // projection with second pose solution:
-        px = R2.at<double>(0, 0) * modelPoints.at<Vec3f>(i)(0) + R2.at<double>(0, 1) * modelPoints.at<Vec3f>(i)(1)
-             + R2.at<double>(0, 2) * modelPoints.at<Vec3f>(i)(2) + t2.at<double>(0);
-        py = R2.at<double>(1, 0) * modelPoints.at<Vec3f>(i)(0) + R2.at<double>(1, 1) * modelPoints.at<Vec3f>(i)(1)
-             + R2.at<double>(1, 2) * modelPoints.at<Vec3f>(i)(2) + t2.at<double>(1);
-        pz = R2.at<double>(2, 0) * modelPoints.at<Vec3f>(i)(0) + R2.at<double>(2, 1) * modelPoints.at<Vec3f>(i)(1)
-             + R2.at<double>(2, 2) * modelPoints.at<Vec3f>(i)(2) + t2.at<double>(2);
+        px = static_cast<float>(R2.at<double>(0, 0) * modelPoints.at<Vec3f>(i)(0)) +
+             static_cast<float>(R2.at<double>(0, 1) * modelPoints.at<Vec3f>(i)(1)) +
+             static_cast<float>(R2.at<double>(0, 2) * modelPoints.at<Vec3f>(i)(2) + t2.at<double>(0));
+        py = static_cast<float>(R2.at<double>(1, 0) * modelPoints.at<Vec3f>(i)(0)) +
+             static_cast<float>(R2.at<double>(1, 1) * modelPoints.at<Vec3f>(i)(1)) +
+             static_cast<float>(R2.at<double>(1, 2) * modelPoints.at<Vec3f>(i)(2) + t2.at<double>(1));
+        pz = static_cast<float>(R2.at<double>(2, 0) * modelPoints.at<Vec3f>(i)(0)) +
+             static_cast<float>(R2.at<double>(2, 1) * modelPoints.at<Vec3f>(i)(1)) +
+             static_cast<float>(R2.at<double>(2, 2) * modelPoints.at<Vec3f>(i)(2) + t2.at<double>(2));
 
         dx = px / pz - imgPoints.at<Vec2f>(i)(0);
         dy = py / pz - imgPoints.at<Vec2f>(i)(1);
@@ -249,12 +255,15 @@ float IPPE::IPPEvalReprojectionError(InputArray _R, InputArray _t, InputArray _o
     // now loop over each correspondence and compute the reprojection error
     for (int i = 0; i < numPts; i++)
     {
-        px = R.at<double>(0, 0) * modelPoints.at<Vec3f>(i)(0) + R.at<double>(0, 1) * modelPoints.at<Vec3f>(i)(1)
-             + R.at<double>(0, 2) * modelPoints.at<Vec3f>(i)(2) + t.at<double>(0);
-        py = R.at<double>(1, 0) * modelPoints.at<Vec3f>(i)(0) + R.at<double>(1, 1) * modelPoints.at<Vec3f>(i)(1)
-             + R.at<double>(1, 2) * modelPoints.at<Vec3f>(i)(2) + t.at<double>(1);
-        pz = R.at<double>(2, 0) * modelPoints.at<Vec3f>(i)(0) + R.at<double>(2, 1) * modelPoints.at<Vec3f>(i)(1)
-             + R.at<double>(2, 2) * modelPoints.at<Vec3f>(i)(2) + t.at<double>(2);
+        px = static_cast<float>(R.at<double>(0, 0) * modelPoints.at<Vec3f>(i)(0)) +
+             static_cast<float>(R.at<double>(0, 1) * modelPoints.at<Vec3f>(i)(1)) +
+             static_cast<float>(R.at<double>(0, 2) * modelPoints.at<Vec3f>(i)(2) + t.at<double>(0));
+        py = static_cast<float>(R.at<double>(1, 0) * modelPoints.at<Vec3f>(i)(0)) +
+             static_cast<float>(R.at<double>(1, 1) * modelPoints.at<Vec3f>(i)(1)) +
+             static_cast<float>(R.at<double>(1, 2) * modelPoints.at<Vec3f>(i)(2) + t.at<double>(1));
+        pz = static_cast<float>(R.at<double>(2, 0) * modelPoints.at<Vec3f>(i)(0)) +
+             static_cast<float>(R.at<double>(2, 1) * modelPoints.at<Vec3f>(i)(1)) +
+             static_cast<float>(R.at<double>(2, 2) * modelPoints.at<Vec3f>(i)(2) + t.at<double>(2));
 
         dx = px / pz - imgPoints.at<Vec2f>(i)(0);
         dy = py / pz - imgPoints.at<Vec2f>(i)(1);

@@ -10,10 +10,10 @@ namespace aruco
     public:
         Line(const cv::Point p1, const cv::Point p2)
         {
-            _a = (p1.y - p2.y);
-            _b = (p2.x - p1.x);
-            _c = (p1.x * (-(p1.y - p2.y)) + p1.y * (-(p2.x - p1.x)));
-            inv_den = 1. / pow(_a * _a + _b * _b, 0.5);
+            _a = static_cast<float>(p1.y - p2.y);
+            _b = static_cast<float>(p2.x - p1.x);
+            _c = static_cast<float>(p1.x * (-(p1.y - p2.y)) + p1.y * (-(p2.x - p1.x)));
+            inv_den = (1.f / std::pow(_a * _a + _b * _b, 0.5f));
         }
         // Calcula la distancia de un punto a una recta
         float dist(const cv::Point p) const
@@ -66,7 +66,7 @@ namespace aruco
                                               vector<cv::Point>& aproximacion)
     {
         // primero seleccionamos dos puntos aleatorios que van a ser el inicial y el central
-        unsigned int inicial = 0, central = contorno.size() / 2;
+        unsigned int inicial = 0, central = static_cast<unsigned int>(contorno.size()) / 2;
 
         // Ahora se calculan los puntos más distantes a la recta que une esos puntos
         // uno en el recorrido inicial, central y otro en el recorrido central inicial
@@ -79,7 +79,8 @@ namespace aruco
         calculate_emax_between_points(contorno, inicial, central, eMax1, posicionMax1);
         //  cout << "posicion max 1 = " << posicionMax1 << endl;
         // cout <<"CALCULO P3 \n";
-        calculate_emax_between_points(contorno, central, contorno.size() - 1, eMax3, posicionMax3);
+        calculate_emax_between_points(contorno, central,
+            static_cast<unsigned int>(contorno.size() - 1), eMax3, posicionMax3);
         // cout << "posicion max 3 = " << posicionMax3 << endl;
 
         // Ahora comprobamos si es un triángulo. Para ello se comprueba el emax entre los vértices recién obtenidos

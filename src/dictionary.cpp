@@ -89,10 +89,10 @@ Dictionary Dictionary::loadFromFile(std::string path) {
                 for(auto it=line.rbegin();it!=line.rend() ;it++){
                     marker[idx++]=*it=='1';
                 }
-                d._code_id.insert({marker.to_ullong(),d._code_id.size()});
+                d._code_id.insert({marker.to_ullong(), static_cast<uint16_t>(d._code_id.size())});
         }
     }
-    d._tau=computeDictionaryDistance(d);
+    d._tau= static_cast<uint32_t>(computeDictionaryDistance(d));
     if (d._tau==0){
         cerr<<"IMPORTANT MESSAGE:::: Your dictionary "<<d._name<<" has a distance of 0"<<endl;
         cerr<<"It means that that there are markers that can be confused. Please check"<<endl;
@@ -263,13 +263,13 @@ fromVector(codes,d._code_id);
  * @param id
  * @return
  */
-cv::Mat Dictionary::getMarkerImage_id(int id,int bit_size,bool addWaterMark,bool enclosed_corners){
-
-
-    int A=bit_size*(2+sqrt(nbits()));
+cv::Mat Dictionary::getMarkerImage_id(int id,int bit_size,bool addWaterMark,bool enclosed_corners)
+{
+    const int nBitsSquared = static_cast<int>(std::sqrt(nbits()));
+    const int A=bit_size*(2+nBitsSquared);
 
     cv::Mat img=cv::Mat::zeros(A,A,CV_8UC1);
-    int bs=sqrt(nbits());
+
     //find the code in the map
     uint64_t code;
     bool found=false;
@@ -287,8 +287,8 @@ cv::Mat Dictionary::getMarkerImage_id(int id,int bit_size,bool addWaterMark,bool
     bitset<64> bset=code;
 
      int bidx=0;
-    for (int y = bs-1; y >=0 ; y--)
-        for (int x = bs-1; x >=0; x--){
+    for (int y = nBitsSquared-1; y >=0 ; y--)
+        for (int x = nBitsSquared-1; x >=0; x--){
             if (bset[bidx++]){
                  cv::Mat bit_pix=img( cv::Range((1+y)*bit_size,(2+y)*bit_size),cv::Range((1+x)*bit_size,(2+x)*bit_size));
                 bit_pix.setTo(cv::Scalar::all(255));
@@ -298,12 +298,12 @@ cv::Mat Dictionary::getMarkerImage_id(int id,int bit_size,bool addWaterMark,bool
     if (addWaterMark){
             char idcad[30];
             sprintf(idcad, "#%d", id);
-            float ax = float(A) / 100.;
+            float ax = static_cast<float>(A) / 100.f;
             int linew = 1 + (img.rows / 500);
             cv::putText(img, idcad, cv::Point(0, img.rows - img.rows / 40), cv::FONT_HERSHEY_COMPLEX, ax * 0.15f, cv::Scalar::all(30), linew,CV_AA);
 
     }
-    //
+
     if (enclosed_corners){
       cv::Mat biggerImage( img.rows*2,img.cols*2,img.type());
       biggerImage.setTo(cv::Scalar::all(255));
@@ -368,7 +368,7 @@ bool Dictionary::isPredefinedDictinaryString(string str)  {
     try{
         getTypeFromString(str);
         return true;
-    } catch(std::exception &ex){
+    } catch(std::exception &){
         return false;
     }
 }
@@ -379,22 +379,24 @@ return {   "ARUCO","ARUCO_MIP_16h3","ARUCO_MIP_25h7","ARUCO_MIP_36h12", "ARTOOLK
 
 }
 
-MarkerMap  Dictionary::createMarkerMap( cv::Size gridSize,int MarkerSize,int MarkerDistance, const std::vector<int> &ids,bool chess_board) throw (cv::Exception){
+MarkerMap  Dictionary::createMarkerMap( cv::Size gridSize,int MarkerSize,int MarkerDistance, const std::vector<int> &ids,bool chess_board) {
     if (gridSize.height*gridSize.width!=int(ids.size()))throw cv::Exception(9001, "gridSize != ids.size()Invalid ", "Dictionary::createMarkerMap", __FILE__, __LINE__);
     MarkerMap TInfo;
 
     TInfo.mInfoType=MarkerMap::PIX;
     TInfo.setDictionary(getTypeString(_type));
+    const float markerSizeFloat = static_cast<float>(MarkerSize);
 
 
     if (!chess_board){
         TInfo.resize(ids.size());
         for (size_t i=0;i<ids.size();i++) TInfo[i].id=ids[i];
          int idp=0;
-        double mtotal=MarkerDistance+MarkerSize;
+        float mtotal=static_cast<float>(MarkerDistance)+markerSizeFloat;
         for (int y=0;y<gridSize.height;y++)
             for (int x=0;x<gridSize.width;x++,idp++) {
-                for(auto p:aruco::Marker::get3DPoints(MarkerSize))
+                /// \todo use const auto &
+                for(auto p:aruco::Marker::get3DPoints(markerSizeFloat))
                     TInfo[idp].push_back(p+cv::Point3f(x*mtotal,y*mtotal,0) );
             }
     }
@@ -412,8 +414,9 @@ MarkerMap  Dictionary::createMarkerMap( cv::Size gridSize,int MarkerSize,int Mar
                 if (toWrite) {
                     if (CurMarkerIdx>=int(ids.size())) throw cv::Exception(999," FiducidalMarkers::createMarkerMapImage_ChessMarkerMap","INTERNAL ERROR. REWRITE THIS!!",__FILE__,__LINE__);
                     TInfo.push_back( Marker3DInfo(ids[CurMarkerIdx++]));
-                    for(auto p:aruco::Marker::get3DPoints(MarkerSize))
-                        TInfo.back().push_back(p+cv::Point3f(x*MarkerSize,y*MarkerSize,0) );
+                    /// \todo use const auto &
+                    for(auto p:aruco::Marker::get3DPoints(markerSizeFloat))
+                        TInfo.back().push_back(p+cv::Point3f(x*markerSizeFloat,y*markerSizeFloat,0) );
                 }
             }
         }
@@ -423,16 +426,16 @@ MarkerMap  Dictionary::createMarkerMap( cv::Size gridSize,int MarkerSize,int Mar
   //  double n=0;
   //  for(auto &ti:TInfo)for(auto p:ti) {center+=p;n++;}
   //  center*=1./n;
-    cv::Point3f center(gridSize.width/2.0 * MarkerSize - MarkerSize/2.0, gridSize.height/2.0 * MarkerSize - MarkerSize/2.0,0);
+    cv::Point3f center(gridSize.width/2.0f * markerSizeFloat - markerSizeFloat/2.0f, gridSize.height/2.0f * markerSizeFloat - markerSizeFloat/2.0f, 0.f);
      for(auto &ti:TInfo) for(auto &p:ti) p-=center;
 
 
     return TInfo;
 }
+
 /**
  * @brief Dictionary::computeDictionaryDistance
  * @param dict
- * @param nbits
  * @return
  */
 uint64_t Dictionary::computeDictionaryDistance(const Dictionary &dict){
@@ -460,7 +463,7 @@ uint64_t Dictionary::computeDictionaryDistance(const Dictionary &dict){
     auto getCode=[](const cv::Mat &in){
                 assert(in.type()==CV_8UC1);
                 std::bitset<64> bs;
-                int bit=in.total()-1;
+                size_t bit= in.total()-1;
                 for(int i=0;i<in.rows;i++)
                     for(int j=0;j<in.cols;j++)
                         bs[bit--]=in.at<uchar>(i,j);
@@ -476,14 +479,14 @@ uint64_t Dictionary::computeDictionaryDistance(const Dictionary &dict){
     auto code_id2=dict._code_id;
      for(auto tag_id:code_id2){
          all_rotations.push_back(tag_id.first);
-        auto m=getImage(tag_id.first,sqrt(dict._nbits));
-        for(int i=0;i<3;i++){
+        auto m=getImage(tag_id.first, static_cast<int>(sqrt(dict._nbits)));
+        for(int i=0;i<3;i++)
+        {
             m=rotate(m);
             all_rotations.push_back(getCode(m));
             ids.push_back(  tag_id.second);
-            }
-         assert( getCode(rotate(m))==tag_id.first );
-
+        }
+        assert( getCode(rotate(m))==tag_id.first );
     }
 
     //now, compute minimum distance

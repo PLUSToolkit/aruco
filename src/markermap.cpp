@@ -146,7 +146,7 @@ namespace aruco
     {
         for (size_t i = 0; i < size(); i++)
             if (at(i).id == id)
-                return i;
+                return static_cast<int>(i);
         return -1;
     }
 
@@ -326,7 +326,7 @@ namespace aruco
             throw cv::Exception(-1, "The board is not expressed in pixels", "MarkerMap::convertToMeters", __FILE__,
                                 __LINE__);
         // first, we are assuming all markers are equally sized. So, lets get the size in pixels
-        int markerSizePix = cv::norm(at(0)[0] - at(0)[1]);
+        int markerSizePix = static_cast<int>(cv::norm(at(0)[0] - at(0)[1]));
         MarkerMap BInfo(*this);
         BInfo.mInfoType = MarkerMap::METERS;
         // now, get the size of a pixel, and change scale
@@ -374,18 +374,18 @@ namespace aruco
         for (auto& m : p3d)
             for (auto& p : m)
             {
-                p -= cv::Point3f(pmin.x, pmax.y, 0);
+                p -= cv::Point3f(static_cast<float>(pmin.x), static_cast<float>(pmax.y), 0.f);
                 // now, use inverse y
                 p.y = -p.y;
             }
         for (auto m : p3d)
         {
             // get size and find size of this
-            float size = cv::norm(m[0] - m[1]);
+            const float size = static_cast<float>(cv::norm(m[0] - m[1]));
             auto im1 = Dict.getMarkerImage_id(m.id, int(size / 8));
             cv::Mat im2;
             // now resize to fit
-            cv::resize(im1, im2, cv::Size(size, size));
+            cv::resize(im1, im2, cv::Size(static_cast<int>(size), static_cast<int>(size)));
             // copy in correct position
             auto ry = cv::Range(int(m[0].y), int(m[2].y));
             auto rx = cv::Range(int(m[0].x), int(m[2].x));
@@ -406,7 +406,7 @@ namespace aruco
                 if (markers[i].id == at(j).id)
                 {
                     found = true;
-                    indices.push_back(i);
+                    indices.push_back(static_cast<int>(i));
                 }
             }
         }
