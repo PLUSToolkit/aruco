@@ -1,6 +1,4 @@
 link_libraries(${PROJECT_NAME} ${REQUIRED_LIBRARIES} )
-set_source_files_properties(create_artag_hrm_dict.cpp PROPERTIES COMPILE_FLAGS -std=c++11)
-set_source_files_properties(create_aruco_dict.cpp PROPERTIES COMPILE_FLAGS -std=c++11)
 
 add_executable(create_artag_hrm_dict create_artag_hrm_dict.cpp)
 add_executable(create_aruco_dict create_aruco_dict.cpp )
