@@ -330,17 +330,18 @@ namespace aruco
 
     void MarkerDetector::detectRectangles(vector<cv::Mat>& thresImgv, vector<MarkerCandidate>& OutMarkerCanditates)
     {
-        // omp_set_num_threads ( 1 );
+        //
         vector<vector<MarkerCandidate>> MarkerCanditatesV(omp_get_max_threads());
         // calcualte the min_max contour sizes
-        int maxSize = static_cast<int>(_params._maxSize) * std::max(thresImgv[0].cols, thresImgv[0].rows) * 4;
+        int maxSize = static_cast<float>(_params._maxSize) * std::max(thresImgv[0].cols, thresImgv[0].rows) * 4;
         int minSize =
-            std::min(static_cast<int>(_params._minSize_pix), static_cast<int>(_params._minSize)*
+            std::min(static_cast<float>(_params._minSize_pix), static_cast<float>(_params._minSize)*
                      std::max(thresImgv[0].cols, thresImgv[0].rows) * 4);
 //#define _aruco_debug_detectrectangles
 #ifdef _aruco_debug_detectrectangles
-        cv::Mat input;
-        cv::cvtColor(thresImgv[0], input, CV_GRAY2BGR);
+    omp_set_num_threads ( 1 );
+    cv::Mat input;
+    cv::cvtColor(thresImgv[0], input, CV_GRAY2BGR);
 #endif
 
 #pragma omp parallel for
@@ -401,7 +402,10 @@ namespace aruco
                 }
             }
         }
-
+#ifdef _aruco_debug_detectrectangles
+cv::imshow("image_rec",input);
+cv::waitKey(0);
+#endif
         // join all candidates
         vector<MarkerCandidate> MarkerCanditates;
 
