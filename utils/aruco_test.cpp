@@ -44,7 +44,7 @@ CameraParameters TheCameraParameters;
 void cvTackBarEvents(int pos, void*);
 string dictionaryString;
 pair<double, double> AvrgTime(0, 0);  // determines the average time required for detection
-int iThresParam1, iThresParam2,iEnclosedMarkers=0,iCorrectionRate=0;
+int iThresParam1, iThresParam2,iEnclosedMarkers=0,iCorrectionRate=0,iShowAllCandidates=0;
 int waitTime = 0;
 class CmdLineParser
 {
@@ -162,6 +162,7 @@ int main(int argc, char** argv)
         cv::createTrackbar("ThresParam2", "in", &iThresParam2, 13, cvTackBarEvents);
         cv::createTrackbar("correction_rate", "in", &iCorrectionRate, 10, cvTackBarEvents);
         cv::createTrackbar("EnclosedMarkers", "in", &iEnclosedMarkers, 1, cvTackBarEvents);
+        cv::createTrackbar("ShowAllCandidates", "in", &iShowAllCandidates, 1, cvTackBarEvents);
 
         // go!
         char key = 0;
@@ -182,6 +183,12 @@ int main(int argc, char** argv)
 
             // print marker info and draw the markers in image
             TheInputImage.copyTo(TheInputImageCopy);
+
+            if (iShowAllCandidates){
+                auto candidates=MDetector.getCandidates();
+                for(auto cand:candidates)
+                    Marker(cand,-1).draw(TheInputImageCopy, Scalar(255, 0, 255));
+            }
 
             for (unsigned int i = 0; i < TheMarkers.size(); i++)
             {
@@ -258,6 +265,12 @@ void cvTackBarEvents(int pos, void*)
     // recompute
     MDetector.detect(TheInputImage, TheMarkers, TheCameraParameters);
     TheInputImage.copyTo(TheInputImageCopy);
+    if (iShowAllCandidates){
+        auto candidates=MDetector.getCandidates();
+        for(auto cand:candidates)
+            Marker(cand,-1).draw(TheInputImageCopy, Scalar(255, 0, 255));
+    }
+
     for (unsigned int i = 0; i < TheMarkers.size(); i++)
         TheMarkers[i].draw(TheInputImageCopy, Scalar(0, 0, 255));
 
