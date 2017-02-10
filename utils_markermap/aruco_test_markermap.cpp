@@ -82,7 +82,7 @@ public:
 };
 
 void savePCDFile(string fpath, const aruco::MarkerMap& ms,
-                 const std::map<int, cv::Mat> frame_pose_map) throw(std::exception);
+                 const std::map<int, cv::Mat> frame_pose_map);
 void savePosesToFile(string filename, const std::map<int, cv::Mat>& fmp);
 
 /************************************
@@ -163,8 +163,8 @@ int main(int argc, char** argv)
         {
             MarkerDetector::Params params = TheMarkerDetector.getParams();
             params._cornerMethod = MarkerDetector::SUBPIX;
-            params._subpix_wsize =
-                (15. / 2000.) * float(TheInputImage.cols);  // search corner subpix in a 5x5 widow area
+            // search corner subpix in a 5x5 widow area
+            params._subpix_wsize = static_cast<int>((15.f / 2000.f) * float(TheInputImage.cols));
             TheMarkerDetector.setParams(params);
         }
 
@@ -184,8 +184,8 @@ int main(int argc, char** argv)
         cv::namedWindow("in", 1);
 
         TheMarkerDetector.getThresholdParams(ThresParam1, ThresParam2);
-        iThresParam1 = ThresParam1;
-        iThresParam2 = ThresParam2;
+        iThresParam1 = static_cast<int>(ThresParam1);
+        iThresParam2 = static_cast<int>(ThresParam2);
         cv::createTrackbar("ThresParam1", "in", &iThresParam1, 13, cvTackBarEvents);
         cv::createTrackbar("ThresParam2", "in", &iThresParam2, 13, cvTackBarEvents);
         char key = 0;
@@ -285,7 +285,8 @@ inline float SIGN(float x)
 {
     return (x >= 0.0f) ? +1.0f : -1.0f;
 }
-inline float NORM(float a, float b, float c, float d)
+
+inline double NORM(double a, double b, double c, double d)
 {
     return sqrt(a * a + b * b + c * c + d * d);
 }
@@ -357,10 +358,10 @@ void getQuaternionAndTranslationfromMatrix44(const cv::Mat& M_in, float& qx, flo
         cerr << "Coding error" << endl;
     }
     double r = NORM(q0, q1, q2, q3);
-    qx = q0 / r;
-    qy = q1 / r;
-    qz = q2 / r;
-    qw = q3 / r;
+    qx = static_cast<float>(q0 / r);
+    qy = static_cast<float>(q1 / r);
+    qz = static_cast<float>(q2 / r);
+    qw = static_cast<float>(q3 / r);
 
     tx = M.at<float>(0, 3);
     ty = M.at<float>(1, 3);

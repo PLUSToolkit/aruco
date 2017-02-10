@@ -74,7 +74,7 @@ int main(int argc, char** argv)
         // read marker size if indicated
         float MarkerSize = -1;
         if (argc >= 5)
-            MarkerSize = atof(argv[4]);
+            MarkerSize = static_cast<float>(atof(argv[4]));
         // transform the markersetconfig to meter if is in pixels and the markersize indicated
         if (TheMarkerMapConfig.isExpressedInPixels() && MarkerSize > 0)
             TheMarkerMapConfig = TheMarkerMapConfig.convertToMeters(MarkerSize);

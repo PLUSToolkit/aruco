@@ -40,15 +40,15 @@ struct Quaternion
     {
         cv::Mat R(3, 3, CV_32F);
         R.at<float>(0, 0) = q[0] * q[0] + q[1] * q[1] - q[2] * q[2] - q[3] * q[3];
-        R.at<float>(0, 1) = 2. * (q[1] * q[2] - q[0] * q[3]);
-        R.at<float>(0, 2) = 2. * (q[1] * q[3] + q[0] * q[2]);
+        R.at<float>(0, 1) = 2.f * (q[1] * q[2] - q[0] * q[3]);
+        R.at<float>(0, 2) = 2.f * (q[1] * q[3] + q[0] * q[2]);
 
-        R.at<float>(1, 0) = 2. * (q[1] * q[2] + q[0] * q[3]);
+        R.at<float>(1, 0) = 2.f * (q[1] * q[2] + q[0] * q[3]);
         R.at<float>(1, 1) = q[0] * q[0] + q[2] * q[2] - q[1] * q[1] - q[3] * q[3];
-        R.at<float>(1, 2) = 2. * (q[2] * q[3] - q[0] * q[1]);
+        R.at<float>(1, 2) = 2.f * (q[2] * q[3] - q[0] * q[1]);
 
-        R.at<float>(2, 0) = 2. * (q[1] * q[3] - q[0] * q[2]);
-        R.at<float>(2, 1) = 2. * (q[2] * q[3] + q[0] * q[1]);
+        R.at<float>(2, 0) = 2.f * (q[1] * q[3] - q[0] * q[2]);
+        R.at<float>(2, 1) = 2.f * (q[2] * q[3] + q[0] * q[1]);
         R.at<float>(2, 2) = q[0] * q[0] + q[3] * q[3] - q[1] * q[1] - q[2] * q[2];
         return R;
     }
@@ -108,7 +108,7 @@ float rigidBodyTransformation_Horn1987(cv::Mat& S, cv::Mat& M, cv::Mat& RT_4x4)
     A.at<float>(2, 0) = AA.at<float>(0, 1);
     //     cout<<"A ="<<A <<endl;
     cv::Mat Q_Var_sm(4, 4, CV_32F);
-    Q_Var_sm.at<float>(0, 0) = trace(Var_sm)[0];
+    Q_Var_sm.at<float>(0, 0) = static_cast<float>(trace(Var_sm)[0]);
     for (int i = 1; i < 4; i++)
     {
         Q_Var_sm.at<float>(0, i) = A.ptr<float>(0)[i - 1];
@@ -150,7 +150,7 @@ float rigidBodyTransformation_Horn1987(cv::Mat& S, cv::Mat& M, cv::Mat& RT_4x4)
         dest_est.y = matrix[4] * org.x + matrix[5] * org.y + matrix[6] * org.z + matrix[7];
         dest_est.z = matrix[8] * org.x + matrix[9] * org.y + matrix[10] * org.z + matrix[11];
         cv::Point3f dest_real = M.ptr<cv::Point3f>(0)[i];
-        err += cv::norm(dest_est - dest_real);
+        err += static_cast<float>(cv::norm(dest_est - dest_real));
     }
     return err / float(S.rows);
     ;
@@ -171,8 +171,8 @@ float rigidBodyTransformation_Horn1987(const vector<cv::Point3f>& orgPoints_32FC
                                        const vector<cv::Point3f>& dstPoints_32FC3, cv::Mat& Rvec, cv::Mat& Tvec)
 {
     cv::Mat Morg, Mdest;
-    Morg.create(orgPoints_32FC3.size(), 1, CV_32FC3);
-    Mdest.create(dstPoints_32FC3.size(), 1, CV_32FC3);
+    Morg.create(static_cast<int>(orgPoints_32FC3.size()), 1, CV_32FC3);
+    Mdest.create(static_cast<int>(dstPoints_32FC3.size()), 1, CV_32FC3);
     for (size_t i = 0; i < dstPoints_32FC3.size(); i++)
     {
         Morg.ptr<cv::Point3f>(0)[i] = orgPoints_32FC3[i];
@@ -251,24 +251,23 @@ cv::Mat rigidBodyTransformation_Horn1987(const std::vector<cv::Point3f>& org, co
 cv::Point3f mult(const cv::Mat& m, cv::Point3f p)
 {
     assert(m.isContinuous());
+    cv::Point3f res;
     if (m.type() == CV_32F)
     {
         const float* ptr = m.ptr<float>(0);
-        cv::Point3f res;
         res.x = ptr[0] * p.x + ptr[1] * p.y + ptr[2] * p.z + ptr[3];
         res.y = ptr[4] * p.x + ptr[5] * p.y + ptr[6] * p.z + ptr[7];
         res.z = ptr[8] * p.x + ptr[9] * p.y + ptr[10] * p.z + ptr[11];
-        return res;
     }
     else if (m.type() == CV_64F)
     {
         const double* ptr = m.ptr<double>(0);
         cv::Point3f res;
-        res.x = ptr[0] * p.x + ptr[1] * p.y + ptr[2] * p.z + ptr[3];
-        res.y = ptr[4] * p.x + ptr[5] * p.y + ptr[6] * p.z + ptr[7];
-        res.z = ptr[8] * p.x + ptr[9] * p.y + ptr[10] * p.z + ptr[11];
-        return res;
+        res.x = static_cast<float>(ptr[0] * p.x + ptr[1] * p.y + ptr[2] * p.z + ptr[3]);
+        res.y = static_cast<float>(ptr[4] * p.x + ptr[5] * p.y + ptr[6] * p.z + ptr[7]);
+        res.z = static_cast<float>(ptr[8] * p.x + ptr[9] * p.y + ptr[10] * p.z + ptr[11]);
     }
+    return res;
 }
 
 std::vector<cv::Vec4f> getPcdPoints(const vector<cv::Point3f>& mpoints, cv::Scalar color, int npoints = 100)
@@ -278,13 +277,13 @@ std::vector<cv::Vec4f> getPcdPoints(const vector<cv::Point3f>& mpoints, cv::Scal
     float fcolor;
     uchar* c = (uchar*)&fcolor;
     for (int i = 0; i < 3; i++)
-        c[i] = color[i];
+        c[i] = static_cast<uchar>(color[i]);
 
     // lines joining points
     for (size_t i = 0; i < mpoints.size(); i++)
     {
         cv::Point3f v = mpoints[(i + 1) % mpoints.size()] - mpoints[i];
-        float ax = 1. / float(npoints);  // npoints
+        float ax = 1.f / float(npoints);  // npoints
         for (float x = 0; x <= 1; x += ax)
         {
             cv::Point3f p3 = mpoints[i] + v * x;
@@ -303,7 +302,7 @@ std::vector<cv::Vec4f> getPcdPoints(const vector<cv::Point3f>& mpoints, cv::Scal
 
     // set the center
     cv::Point3f center = (mpoints[0] + mpoints[1] + mpoints[2] + mpoints[3]) * 0.25;
-    float ax = (msize / 3) / 100;
+    const float ax = static_cast<float>((msize / 3.) / 100.);
     for (float x = 0; x <= msize / 3; x += ax)
     {
         cv::Point3f p3 = center + vz * x;
@@ -337,7 +336,7 @@ vector<cv::Vec4f> getMarkerIdPcd(aruco::Marker3DInfo& minfo, cv::Scalar color)
         for (int x = 0; x < img.cols; x++)
             if (img.at<uchar>(y, x) != 0)
                 points_id.push_back(
-                    cv::Point3f((float(x) / float(img.cols)) - 0.5, (float(img.rows - y) / float(img.rows)) - 0.5, 0));
+                    cv::Point3f((float(x) / float(img.cols)) - 0.5f, (float(img.rows - y) / float(img.rows)) - 0.5f, 0.f));
 
     // now,scale
     for (auto& p : points_id)
@@ -350,7 +349,7 @@ vector<cv::Vec4f> getMarkerIdPcd(aruco::Marker3DInfo& minfo, cv::Scalar color)
     float fcolor;
     uchar* c = (uchar*)&fcolor;
     for (int i = 0; i < 3; i++)
-        c[i] = color[i];
+        c[i] = static_cast<uchar>(color[i]);
 
     vector<cv::Vec4f> res;
     for (auto& p : points_id)
@@ -360,7 +359,7 @@ vector<cv::Vec4f> getMarkerIdPcd(aruco::Marker3DInfo& minfo, cv::Scalar color)
 }
 
 void savePCDFile(string fpath, const aruco::MarkerMap& ms,
-                 const std::map<int, cv::Mat> frame_pose_map) throw(std::exception)
+                 const std::map<int, cv::Mat> frame_pose_map)
 {
     std::vector<cv::Vec4f> points2write;
     for (auto m : ms)

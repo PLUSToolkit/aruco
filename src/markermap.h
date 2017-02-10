@@ -60,7 +60,7 @@ namespace aruco
         // returns the distance of the marker side
         float getMarkerSize() const
         {
-            return cv::norm(at(0) - at(1));
+            return static_cast<float>(cv::norm(at(0) - at(1)));
         }
 
     public:
@@ -110,7 +110,7 @@ namespace aruco
         /**Loads from file
          * @param filePath to the config file
          */
-        MarkerMap(string filePath) throw(cv::Exception);
+        MarkerMap(string filePath);
 
         /**Indicates if the corners are expressed in meters
          */
@@ -126,7 +126,7 @@ namespace aruco
         }
         /**converts the passed board into meters
          */
-        MarkerMap convertToMeters(float markerSize) throw(cv::Exception);
+        MarkerMap convertToMeters(float markerSize);
         // simple way of knowing which elements detected in an image are from this markermap
         // returns the indices of the elements in the vector 'markers' that belong to this set
         // Example: The set has the elements with ids 10,21,31,41,92
@@ -137,7 +137,7 @@ namespace aruco
 
         /**Returns the Info of the marker with id specified. If not in the set, throws exception
          */
-        const Marker3DInfo& getMarker3DInfo(int id) const throw(cv::Exception);
+        const Marker3DInfo& getMarker3DInfo(int id) const;
 
         /**Returns the index of the marker (in this object) with id indicated, if is in the vector
          */
@@ -149,19 +149,19 @@ namespace aruco
         /**Returns an image of this to be printed. This object must be in pixels @see isExpressedInPixels(). If
          * not,please provide the METER2PIX conversion parameter
             */
-        cv::Mat getImage(float METER2PIX = 0) const throw(cv::Exception);
+        cv::Mat getImage(float METER2PIX = 0) const;
 
         /**Saves the board info to a file
         */
-        void saveToFile(string sfile) throw(cv::Exception);
+        void saveToFile(string sfile);
         /**Reads board info from a file
         */
-        void readFromFile(string sfile) throw(cv::Exception);
+        void readFromFile(string sfile);
 
         // calculates the camera location w.r.t. the map using the information provided
         // returns the <rvec,tvec>
         pair<cv::Mat, cv::Mat> calculateExtrinsics(const std::vector<aruco::Marker>& markers, float markerSize,
-                                                   cv::Mat CameraMatrix, cv::Mat Distorsion) throw(cv::Exception);
+                                                   cv::Mat CameraMatrix, cv::Mat Distorsion);
 
         // returns string indicating the dictionary
         std::string getDictionary() const
@@ -192,10 +192,10 @@ namespace aruco
     private:
         /**Saves the board info to a file
         */
-        void saveToFile(cv::FileStorage& fs) throw(cv::Exception);
+        void saveToFile(cv::FileStorage& fs);
         /**Reads board info from a file
         */
-        void readFromFile(cv::FileStorage& fs) throw(cv::Exception);
+        void readFromFile(cv::FileStorage& fs);
 
     public:
         void toStream(std::ostream& str);

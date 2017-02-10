@@ -111,7 +111,7 @@ int main(int argc, char** argv)
         // take the required ones
         ids.resize(XSize * YSize);
         aruco::MarkerMap BInfo =
-            Dict.createMarkerMap(Size(XSize, YSize), pixSize, pixSize * interMarkerDistance, ids, typeMarkerMap == 1);
+            Dict.createMarkerMap(Size(XSize, YSize), pixSize, pixSize * static_cast<int>(interMarkerDistance), ids, typeMarkerMap == 1);
         // create a printable image to save
         cv::Mat MarkerMapImage = BInfo.getImage();
 

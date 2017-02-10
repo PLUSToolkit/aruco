@@ -1,2 +1,8 @@
+# Common names for build directories
 build*
+
+# Vim Temporary files
 *.swp
+
+# QtCreator user files
+*.txt.user

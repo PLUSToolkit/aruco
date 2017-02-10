@@ -47,8 +47,6 @@ int main(int argc, char** argv)
         std::vector<cv::Vec4i> hierarchy;
         std::vector<std::vector<cv::Point>> contours;
 
-        float minSize = 100;
-
         cv::findContours(out, contours, hierarchy, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
         cout << "contours.size()==" << contours.size() << endl;
         cv::drawContours(image, contours, -1, cv::Scalar(0, 0, 255), 1);

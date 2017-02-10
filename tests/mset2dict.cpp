@@ -31,8 +31,7 @@ int main(int argc, char** argv)
     aruco::Dictionary dict2;
     // insert the elements
     cout << "\n\nvector<uint64_t> codes={";
-    int idx = 0;
-    for (int i = 0; i < dic.size(); i++)
+    for (size_t i = 0; i < dic.size(); i++)
     {
         uint64_t code = fromString(dic[i].toString()).to_ullong();
         //        cout<<"std::pair<uint64_t,int>("<<code<<","<<i<<")";

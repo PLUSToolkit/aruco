@@ -90,11 +90,11 @@ void getMarker2d_3d(vector<cv::Point2f>& p2d, vector<cv::Point3f>& p3d, const ve
     for (size_t i = 0; i < markers_detected.size(); i++)
     {
         // find it in the bc
-        int fidx = -1;
+        size_t fidx = std::string::npos;
         for (size_t j = 0; j < bc.size() && fidx == -1; j++)
             if (bc[j].id == markers_detected[i].id)
                 fidx = j;
-        if (fidx != -1)
+        if (fidx != std::string::npos)
         {
             for (int j = 0; j < 4; j++)
             {
@@ -144,7 +144,7 @@ int main(int argc, char** argv)
             return -1;
         }
         if (!TheMarkerMapConfig.isExpressedInMeters())
-            TheMarkerMapConfig = TheMarkerMapConfig.convertToMeters(atof(cml("-size").c_str()));
+            TheMarkerMapConfig = TheMarkerMapConfig.convertToMeters(static_cast<float>(atof(cml("-size").c_str())));
         // read from camera or from  file
         string TheInputVideo=string(argv[1]);
         if ( TheInputVideo.find( "live")!=std::string::npos)
@@ -176,13 +176,12 @@ int main(int argc, char** argv)
         // set specific parameters for this configuration
         MarkerDetector::Params params;
         // play with this paramteres if the detection does not work correctly
-        params._borderDistThres = .01;  // acept markers near the borders
-
+        params._borderDistThres = .01f;  // acept markers near the borders
         params._thresParam1 = 5;
         params._thresParam1_range = 5;                                     // search in wide range of values for param1
         params._doErosion=true;//prevents problems with corners enclosed
         params._cornerMethod = MarkerDetector::SUBPIX;                     // use subpixel corner refinement
-        params._subpix_wsize = (15. / 2000.) * float(TheInputImage.cols);  // search corner subpix in a 5x5 widow area
+        params._subpix_wsize = static_cast<int>((15.f / 2000.f) * float(TheInputImage.cols));  // search corner subpix in a 5x5 widow area
         TheMarkerDetector.setParams(params);                               // set the params above
         TheMarkerDetector.setDictionary(TheMarkerMapConfig.getDictionary());
         // Create gui and prepare the detector for an aruco chessboard
@@ -190,8 +189,8 @@ int main(int argc, char** argv)
         cout << "Press 'c' to perform calibration" << endl;
         cout << "Press 's' to start/stop capture" << endl;
         cv::namedWindow("in", 1);
-        iThresParam1 = TheMarkerDetector.getParams()._thresParam1;
-        iThresParam2 = TheMarkerDetector.getParams()._thresParam2;
+        iThresParam1 = static_cast<int>(TheMarkerDetector.getParams()._thresParam1);
+        iThresParam2 = static_cast<int>(TheMarkerDetector.getParams()._thresParam2);
 
         cv::createTrackbar("ThresParam1", "in", &iThresParam1, 13, cvTackBarEvents);
         cv::createTrackbar("ThresParam2", "in", &iThresParam2, 13, cvTackBarEvents);

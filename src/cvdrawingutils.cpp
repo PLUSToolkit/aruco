@@ -103,7 +103,7 @@ namespace aruco
     void CvDrawingUtils::draw3dCube(cv::Mat& Image, Marker& m, const CameraParameters& CP, bool setYperpendicular)
     {
         Mat objectPoints(8, 3, CV_32FC1);
-        double halfSize = m.ssize / 2;
+        float halfSize = m.ssize / 2.f;
 
         if (setYperpendicular)
         {

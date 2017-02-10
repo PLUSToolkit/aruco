@@ -110,11 +110,11 @@ namespace aruco
                 _thresParam1_range = 0;
                 _markerWarpSize = 56;
 
-                _minSize = 0.04;
-                _maxSize = 0.95;
+                _minSize = 0.04f;
+                _maxSize = 0.95f;
                 _minSize_pix = 25;
                 _borderDistThres =
-                    0.005;          // corners at a distance from image boundary nearer than 2.5% of image are ignored
+                    0.005f;          // corners at a distance from image boundary nearer than 2.5% of image are ignored
                 _subpix_wsize = 5;  // window size employed for subpixel search (in vase you use _cornerMethod=SUBPIX
                 _doErosion=false;
             }
@@ -142,9 +142,9 @@ namespace aruco
          * axis
          * @return vector with the detected markers
          */
-        std::vector<aruco::Marker> detect(const cv::Mat& input) throw(cv::Exception);
+        std::vector<aruco::Marker> detect(const cv::Mat& input);
         std::vector<aruco::Marker> detect(const cv::Mat& input, const CameraParameters& camParams,
-                                          float markerSizeMeters, bool setYPerperdicular = false) throw(cv::Exception);
+                                          float markerSizeMeters, bool setYPerperdicular = false);
 
         /**Detects the markers in the image passed
             *
@@ -159,7 +159,7 @@ namespace aruco
          * Z axis
             */
         void detect(const cv::Mat& input, std::vector<Marker>& detectedMarkers, CameraParameters camParams,
-                    float markerSizeMeters = -1, bool setYPerperdicular = false) throw(cv::Exception);
+                    float markerSizeMeters = -1, bool setYPerperdicular = false);
 
         /**Detects the markers in the image passed
          *
@@ -178,7 +178,7 @@ namespace aruco
          */
         void detect(const cv::Mat& input, std::vector<Marker>& detectedMarkers, cv::Mat camMatrix = cv::Mat(),
                     cv::Mat distCoeff = cv::Mat(), float markerSizeMeters = -1,
-                    bool setYPerperdicular = false) throw(cv::Exception);
+                    bool setYPerperdicular = false);
 
         /**Sets operating params
          */
@@ -208,7 +208,7 @@ namespace aruco
          Dictionary::loadFromFile
           Then, it tries to open it
         */
-        void setDictionary(std::string dict_type, float error_correction_rate = 0) throw(cv::Exception);
+        void setDictionary(std::string dict_type, float error_correction_rate = 0);
 
         /**
          * @brief setDictionary Specifies the dictionary you want to use for marker decoding
@@ -219,7 +219,7 @@ namespace aruco
          * that can be corrected depends on each ditionary.
          * We recommend using values from 0 to 0.5. (in general, this will allow up to 3 bits or correction).
          */
-        void setDictionary(Dictionary::DICT_TYPES dict_type, float error_correction_rate = 0) throw(cv::Exception);
+        void setDictionary(Dictionary::DICT_TYPES dict_type, float error_correction_rate = 0);
 
         /**
          * Returns a reference to the internal image thresholded. It is for visualization purposes and to adjust
@@ -268,7 +268,7 @@ namespace aruco
          */
         void setThresholdParamRange(size_t r1 = 0, size_t r2 = 0)
         {
-            _params._thresParam1_range = r1;
+            _params._thresParam1_range = static_cast<double>(r1);
             (void)(r2);
         }
 
@@ -308,7 +308,7 @@ namespace aruco
          * @param max size of the contour to consider a possible marker as valid [0,1)
          *
          */
-        void setMinMaxSize(float min = 0.03, float max = 0.5) throw(cv::Exception)
+        void setMinMaxSize(float min = 0.03, float max = 0.5)
         {
             if (min <= 0 || min > 1)
                 throw cv::Exception(1, " min parameter out of range", "MarkerDetector::setMinMaxSize", __FILE__,
@@ -352,7 +352,7 @@ namespace aruco
          * Specifies the size for the canonical marker image. A big value makes the detection slower than a small value.
          * Minimun value is 10. Default value is 56.
          */
-        void setWarpSize(int val) throw(cv::Exception)
+        void setWarpSize(int val)
         {
             if (val < 10)
                 throw cv::Exception(1, " invalid canonical image size", "MarkerDetector::setWarpSize", __FILE__,
@@ -375,8 +375,8 @@ namespace aruco
          * @brief setMakerLabeler sets the labeler employed to analyze the squares and extract the inner binary code
          * @param detector
          */
-        void setMarkerLabeler(cv::Ptr<MarkerLabeler> detector) throw(cv::Exception);
-        cv::Ptr<MarkerLabeler> getMarkerLabeler() throw(cv::Exception)
+        void setMarkerLabeler(cv::Ptr<MarkerLabeler> detector);
+        cv::Ptr<MarkerLabeler> getMarkerLabeler()
         {
             return markerIdDetector;
         }
@@ -413,7 +413,7 @@ namespace aruco
          * Thesholds the passed image with the specified method.
          */
         void thresHold(int method, const cv::Mat& grey, cv::Mat& thresImg, double param1 = -1,
-                       double param2 = -1) throw(cv::Exception);
+                       double param2 = -1);
         /**A
          * */
         void adpt_threshold_multi(const cv::Mat& grey, std::vector<cv::Mat>& out, double param1, double param1_range,
@@ -440,7 +440,7 @@ namespace aruco
          * @param points 4 corners of the marker in the image in
          * @return true if the operation succeed
          */
-        bool warp(cv::Mat& in, cv::Mat& out, cv::Size size, std::vector<cv::Point2f> points) throw(cv::Exception);
+        bool warp(cv::Mat& in, cv::Mat& out, cv::Size size, std::vector<cv::Point2f> points);
 
         /** Refine MarkerCandidate Corner using LINES method
          * @param candidate candidate to refine corners
@@ -448,7 +448,7 @@ namespace aruco
         void refineCandidateLines(MarkerCandidate& candidate, const cv::Mat& camMatrix, const cv::Mat& distCoeff);
 
     private:
-        bool warp_cylinder(cv::Mat& in, cv::Mat& out, cv::Size size, MarkerCandidate& mc) throw(cv::Exception);
+        bool warp_cylinder(cv::Mat& in, cv::Mat& out, cv::Size size, MarkerCandidate& mc);
         /**
         * Detection of candidates to be markers, i.e., rectangles.
         * This function returns in candidates all the rectangles found in a thresolded image

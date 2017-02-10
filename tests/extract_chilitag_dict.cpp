@@ -19,7 +19,7 @@ bitset<64> fromString(std::string str)
     return bs;
 }
 
-uint64_t process(string file) throw(std::runtime_error)
+uint64_t process(string file)
 {
     cv::Mat im = cv::imread(file, cv::IMREAD_GRAYSCALE);
     if (im.total() != 100)
@@ -51,7 +51,7 @@ int main(int argc, char** argv)
     auto getNumber = [](const string& s) {
         // find point
         int point;
-        for (point = s.size() - 1; point > 0; point--)
+        for (point = static_cast<int>(s.size()) - 1; point > 0; point--)
             if (s[point] == '.')
                 break;
         int start = point - 1;
@@ -74,8 +74,7 @@ int main(int argc, char** argv)
 
     // insert the elements
     cout << "\n\nvector<uint64_t> codes={";
-    int idx = 0;
-    for (int i = 0; i < numbers.size(); i++)
+    for (size_t i = 0; i < numbers.size(); i++)
     {
         cout << "0x" << std::hex << numbers[i] << "UL";
         if (i < numbers.size() - 1)
