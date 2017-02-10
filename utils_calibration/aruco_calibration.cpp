@@ -90,8 +90,8 @@ void getMarker2d_3d(vector<cv::Point2f>& p2d, vector<cv::Point3f>& p3d, const ve
     for (size_t i = 0; i < markers_detected.size(); i++)
     {
         // find it in the bc
-        size_t fidx = std::string::npos;
-        for (size_t j = 0; j < bc.size() && fidx == -1; j++)
+        auto fidx = std::string::npos;
+        for (size_t j = 0; j < bc.size() && fidx == std::string::npos; j++)
             if (bc[j].id == markers_detected[i].id)
                 fidx = j;
         if (fidx != std::string::npos)
