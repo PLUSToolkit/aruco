@@ -8,4 +8,4 @@ target_link_libraries(aruco_simple_markermap        aruco opencv_calib3d)
 target_link_libraries(aruco_test_markermap          aruco opencv_calib3d)
 target_link_libraries(aruco_markermap_pix2meters    aruco opencv_calib3d)
  
-install(TARGETS     aruco_markermap_pix2meters     aruco_simple_markermap aruco_test_markermap    RUNTIME DESTINATION bin)
+install(TARGETS   aruco_create_markermap  aruco_markermap_pix2meters     aruco_simple_markermap aruco_test_markermap    RUNTIME DESTINATION bin)
