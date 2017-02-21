@@ -63,4 +63,4 @@ install(FILES ${headers} ${CMAKE_CURRENT_BINARY_DIR}/aruco_export.h
     DESTINATION include/aruco
 )
 
-install(EXPORT arucoConfig DESTINATION "share/aruco/cmake")
+#install(EXPORT arucoConfig DESTINATION "share/aruco/cmake")

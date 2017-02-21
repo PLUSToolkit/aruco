@@ -1,3 +1,6 @@
+configure_file(cmake/arucoConfig.cmake.in arucoConfig.cmake IMMEDIATE @ONLY)
+install(FILES "${PROJECT_BINARY_DIR}/arucoConfig.cmake" DESTINATION share/aruco/cmake)
+
 # pkg-config
 configure_file(${PROJECT_SOURCE_DIR}/cmake/aruco.pc.in aruco.pc @ONLY)
 configure_file(${PROJECT_SOURCE_DIR}/cmake/aruco-uninstalled.pc.in aruco-uninstalled.pc @ONLY)
