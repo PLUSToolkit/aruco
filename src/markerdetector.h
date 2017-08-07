@@ -38,8 +38,6 @@ or implied, of Rafael Muñoz Salinas.
 #include <cstdio>
 #include <iostream>
 
-using namespace std;
-
 namespace aruco
 {
     class CameraParameters;

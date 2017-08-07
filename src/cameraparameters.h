@@ -32,8 +32,6 @@ or implied, of Rafael Muñoz Salinas.
 #include <opencv2/core/core.hpp>
 #include <string>
 
-using namespace std;
-
 namespace aruco
 {
     /**\brief Parameters of the camera
@@ -81,11 +79,11 @@ namespace aruco
 
         /**Saves this to a file
         */
-        void saveToFile(string path, bool inXML = true);
+        void saveToFile(std::string path, bool inXML = true);
 
         /**Reads from a YAML file generated with the opencv2.2 calibration utility
          */
-        void readFromXMLFile(string filePath);
+        void readFromXMLFile(std::string filePath);
 
         /**Adjust the parameters to the size of the image indicated
          */
