@@ -439,7 +439,7 @@ cv::waitKey(0);
         // first detect candidates to be removed
         vector<vector<pair<int, int>>> TooNearCandidates_omp(omp_get_max_threads());
 #pragma omp parallel for
-        for (unsigned int i = 0; i < MarkerCanditates.size(); i++)
+        for (int i = 0; i < MarkerCanditates.size(); i++)
         {
             // calculate the average distance of each corner to the nearest corner of the other marker candidate
             for (unsigned int j = i + 1; j < MarkerCanditates.size(); j++)
@@ -1183,7 +1183,7 @@ cv::waitKey(0);
 // for each element, search in a region around
 #pragma omp parallel for
 
-        for (size_t i = 0; i < Corners.size(); i++)
+        for (int i = 0; i < Corners.size(); i++)
         {
             cv::Point2f minLimit(std::max(0.f, Corners[i].x - float(wsize)), std::max(0.f, Corners[i].y - float(wsize)));
             cv::Point2f maxLimit(std::min(static_cast<float>(grey.cols), Corners[i].x + static_cast<float>(wsize)),

@@ -30,13 +30,13 @@ SET(_targetFileLocation "${PROJECT_BINARY_DIR}/arucoTargets.cmake")
 configure_file(cmake/arucoConfig.cmake.in arucoConfig.cmake IMMEDIATE @ONLY)
 
 # Make install config file
-SET(_targetFileLocation "${CMAKE_INSTALL_PREFIX}/share/aruco/cmake/arucoTargets.cmake")
+SET(_targetFileLocation "\${CMAKE_CURRENT_LIST_DIR}/arucoTargets.cmake")
 configure_file(cmake/arucoConfig.cmake.in arucoConfig_install.cmake IMMEDIATE @ONLY)
 install(FILES "${PROJECT_BINARY_DIR}/arucoConfig_install.cmake" 
-  DESTINATION share/aruco/cmake
+  DESTINATION lib/cmake/aruco
   RENAME arucoConfig.cmake)
 install(EXPORT arucoConfig
-  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/aruco/cmake
+  DESTINATION lib/cmake/aruco
   FILE arucoTargets.cmake
   )
 
@@ -46,4 +46,4 @@ configure_file(${PROJECT_SOURCE_DIR}/cmake/aruco.pc.in aruco.pc @ONLY)
 configure_file(${PROJECT_SOURCE_DIR}/cmake/aruco-uninstalled.pc.in aruco-uninstalled.pc @ONLY)
 install(FILES "${PROJECT_BINARY_DIR}/aruco-uninstalled.pc" "${PROJECT_BINARY_DIR}/aruco.pc" DESTINATION lib/pkgconfig)
 
-install(FILES "${PROJECT_SOURCE_DIR}/utils_calibration/aruco_calibration_board_a4.pdf"   "${PROJECT_SOURCE_DIR}/utils_calibration/aruco_calibration_board_a4.yml" DESTINATION ${PROJECT_BINARY_DIR}/utils_calibration)
+install(FILES "${PROJECT_SOURCE_DIR}/utils_calibration/aruco_calibration_board_a4.pdf"   "${PROJECT_SOURCE_DIR}/utils_calibration/aruco_calibration_board_a4.yml" DESTINATION share/aruco/utils_calibration)
