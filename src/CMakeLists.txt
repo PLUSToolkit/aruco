@@ -42,10 +42,14 @@ set_target_properties(aruco PROPERTIES          # create *nix style library vers
 )
 
 include(GenerateExportHeader)
-generate_export_header(aruco)
+generate_export_header(aruco STATIC_DEFINE ARUCO_STATIC)
 
 target_link_libraries(aruco PUBLIC opencv_core)
 target_link_libraries(aruco PRIVATE opencv_imgproc opencv_calib3d opencv_features2d)
+
+if(NOT BUILD_SHARED_LIBS)
+  target_compile_definitions(aruco PRIVATE ARUCO_STATIC)
+endif()
 
 target_include_directories(aruco PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
